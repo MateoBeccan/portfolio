@@ -1,11 +1,12 @@
 import { ArrowDownRight, Braces, MapPin, Terminal } from "lucide-react";
-import { profile } from "@/data/profile";
+import { profile, type ResumeDocument } from "@/data/profile";
 import { dictionaries } from "@/i18n/dictionary";
 import type { Locale } from "@/i18n/locales";
-import SocialActions, { CvLink } from "@/components/ui/SocialActions";
+import SocialActions from "@/components/ui/SocialActions";
+import ResumeDownloadLink from "@/components/ui/ResumeDownloadLink";
 
-export default function Hero({ locale }: { locale: Locale }) {
-  const { hero, nav } = dictionaries[locale];
+export default function Hero({ locale, cv }: { locale: Locale; cv?: ResumeDocument }) {
+  const { hero, nav, resume, ui } = dictionaries[locale];
   const [discipline, title] = profile.role.split(" ");
   return (
     <section className="hero" id="home" data-nav tabIndex={-1}>
@@ -18,7 +19,13 @@ export default function Hero({ locale }: { locale: Locale }) {
           <p className="hero-description">{hero.description}</p>
           <div className="action-row hero-actions">
             <a href="#projects" className="button primary">{hero.cta}<ArrowDownRight size={18} aria-hidden="true" /></a>
-            <CvLink locale={locale} />
+            {cv && <ResumeDownloadLink
+              className="button secondary"
+              document={cv}
+              label={ui.cv}
+              language={resume.languages[cv.locale]}
+              showLanguage={cv.locale !== locale}
+            />}
             <a href="#contact" className="button secondary">{nav.contact}</a>
           </div>
           <div className="hero-bottom">

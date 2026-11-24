@@ -1,10 +1,9 @@
 import localFont from "next/font/local";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { profile } from "@/data/profile";
 import { dictionaries } from "@/i18n/dictionary";
 import { isLocale, locales } from "@/i18n/locales";
-import { publicDocument } from "@/lib/public-documents";
+import { availableResumes } from "@/lib/resume";
 import "../globals.css";
 
 const geist = localFont({
@@ -30,13 +29,14 @@ export function generateStaticParams() {
 export default async function Layout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
   const locale = isLocale(lang) ? lang : "es";
-  const { nav, ui } = dictionaries[locale];
+  const { nav, ui, resume } = dictionaries[locale];
+  const [cv] = availableResumes(locale);
   return (
     <html lang={locale === "es" ? "es-AR" : "en"} className={`${geist.variable} ${mono.variable}`} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: initializeTheme }} /></head>
       <body>
         <a className="skip-link" href="#main-content">{ui.skip}</a>
-        <Navbar locale={locale} nav={nav} ui={ui} cv={publicDocument(profile.cv[locale], "cv")} />
+        <Navbar locale={locale} nav={nav} ui={ui} cv={cv} cvLanguage={cv && resume.languages[cv.locale]} />
         {children}
         <Footer locale={locale} />
       </body>

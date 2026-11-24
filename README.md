@@ -49,8 +49,23 @@ Las páginas usan Server Components. La navegación interactiva, el tema y la ga
 - **Formación y credenciales.** Editá `src/data/education.ts`. Guardá el documento público en `public/certificates/`, por ejemplo `public/certificates/amazon-junior-software-developer.pdf` o `public/certificates/ingles-b1.webp`, y asigná la ruta sin `public` a `document`. Se admiten PDF, PNG, JPG, JPEG y WebP. `verificationUrl` acepta un enlace HTTPS que hayas comprobado en la entidad emisora. `credentialId` es opcional.
 - **Estado académico.** La versión preparada para publicar muestra 2024–2026 y `completed` (Finalizado). Confirmá la finalización antes de publicarla. Usá `closing` si la cursada sigue abierta y `degreeAwarded` cuando la institución haya otorgado formalmente el título.
 - **Capturas.** Usá imágenes reales en `public/projects/<proyecto>/` y agregalas a `screenshots` con texto alternativo en ambos idiomas. Colocá primero la imagen de portada e indicá sus dimensiones. La galería admite títulos y descripciones traducidos. Ocultá nombres, documentos, credenciales y cifras privadas con máscaras opacas antes de exportar a `public`. Guardá originales privados fuera de esa carpeta y del control de versiones.
-- **CV y contacto.** Guardá `public/cv/mateo-beccan-cv-es.pdf` y `public/cv/mateo-beccan-cv-en.pdf`, y asigná `/cv/mateo-beccan-cv-es.pdf` y `/cv/mateo-beccan-cv-en.pdf` a `profile.cv.es` y `profile.cv.en` en `src/data/profile.ts`. Cada descarga aparece en el idioma correspondiente cuando el archivo existe y su cabecera coincide con el formato. Usá nombres sin espacios ni acentos para CV y credenciales. El correo y los enlaces sociales también se editan en el perfil.
+- **Contacto.** El correo y los enlaces sociales se editan en `src/data/profile.ts`.
 - **Traducciones.** Actualizá ambos objetos en `src/i18n/dictionary.ts`. Los textos específicos de proyectos, formación y habilidades viven junto con sus datos.
+
+## Currículum descargable
+
+Creá `public/cv/` y agregá solo las versiones aprobadas para el portfolio.
+
+| Idioma | Archivo |
+| --- | --- |
+| Español | `public/cv/Mateo_Beccan_CV_ES.pdf` |
+| Inglés | `public/cv/Mateo_Beccan_CV_EN.pdf` |
+
+Para reemplazar una versión, conservá su nombre. Para sumar la versión ES o EN que falte, agregá el archivo con el nombre de la tabla. Si usás otro nombre de origen, editá `profile.cv` en `src/data/profile.ts` y conservá el nombre de descarga profesional. La ruta se configura desde `/cv/` y admite nombres sin espacios ni acentos. Volvé a compilar para que la portada estática recoja los cambios.
+
+El servidor verifica que el archivo exista dentro de `public/cv/`, sea un archivo regular, tenga extensión `.pdf` y contenga una cabecera y un cierre PDF coherentes. Navbar y Hero descargan la versión del idioma activo o, si falta, la única disponible con su idioma indicado. Contacto lista cada versión disponible, con el idioma activo primero, y ofrece apertura en una pestaña nueva y descarga. Si faltan ambas versiones válidas, las acciones y la tarjeta quedan ocultas.
+
+Todo archivo dentro de `public/` tiene una URL pública. Antes de copiar el PDF, abrilo en un visor y verificá el idioma, el contenido y los datos personales. Mantené los originales privados y las versiones anteriores fuera de `public/`.
 
 ## Desplegar en Vercel
 

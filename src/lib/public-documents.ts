@@ -12,6 +12,15 @@ const fileSignatures: Record<string, (header: Buffer) => boolean> = {
   webp: (header) => header.subarray(0, 4).toString() === "RIFF" && header.subarray(8, 12).toString() === "WEBP",
 };
 
+function hasPdfTrailer(descriptor: number, size: number) {
+  const tail = Buffer.alloc(Math.min(size, 1024));
+  if (readSync(descriptor, tail, 0, tail.length, size - tail.length) !== tail.length) return false;
+  const trailer = /[\r\n]startxref\s+(\d+)\s+%%EOF\s*$/.exec(tail.toString("latin1"));
+  if (!trailer) return false;
+  const offset = Number(trailer[1]);
+  return offset >= 12 && offset < size - tail.length + trailer.index;
+}
+
 export function publicDocument(href: string | undefined, directory: Directory): string | undefined {
   const match = href?.match(/^\/(cv|certificates)\/([a-z0-9_-]+\.(pdf|png|jpe?g|webp))$/i);
   if (!match || match[1] !== directory) return;
@@ -21,14 +30,16 @@ export function publicDocument(href: string | undefined, directory: Directory): 
   try {
     const folder = join(realpathSync("public"), directory);
     const file = realpathSync(join(folder, match[2]));
-    if (dirname(file) !== folder || !statSync(file).isFile()) return;
+    if (dirname(file) !== folder) return;
+    const stats = statSync(file);
+    if (!stats.isFile()) return;
 
     const descriptor = openSync(file, "r");
     try {
       const header = Buffer.alloc(12);
-      if (readSync(descriptor, header, 0, header.length, 0) === header.length && fileSignatures[extension](header)) {
-        return href;
-      }
+      if (readSync(descriptor, header, 0, header.length, 0) !== header.length || !fileSignatures[extension](header)) return;
+      if (directory === "cv" && !hasPdfTrailer(descriptor, stats.size)) return;
+      return href;
     } finally {
       closeSync(descriptor);
     }

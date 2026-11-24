@@ -9,6 +9,7 @@ import Skills from "@/components/sections/Skills";
 import { profile, socialLinks } from "@/data/profile";
 import { dictionaries } from "@/i18n/dictionary";
 import { isLocale } from "@/i18n/locales";
+import { availableResumes } from "@/lib/resume";
 import { pageMetadata, siteUrl } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]">) {
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">) {
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const resumes = availableResumes(lang);
   const url = new URL(`/${lang}`, siteUrl).href;
   const personId = `${new URL("/es", siteUrl).href}#mateo`;
   const schema = {
@@ -33,13 +35,13 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   return (
     <main id="main-content" tabIndex={-1}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
-      <Hero locale={lang} />
+      <Hero locale={lang} cv={resumes[0]} />
       <About locale={lang} />
       <Projects locale={lang} />
       <Skills locale={lang} />
       <Methodology locale={lang} />
       <Education locale={lang} />
-      <Contact locale={lang} />
+      <Contact locale={lang} resumes={resumes} />
     </main>
   );
 }

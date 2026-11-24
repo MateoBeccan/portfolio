@@ -12,13 +12,22 @@ const es = {
   education: {"title":"Formación académica","status":{"closing":"En cierre académico","completed":"Finalizado","degreeAwarded":"Título otorgado"}},
   certifications: { title: "Certificaciones y cursos", categories: { course: "Curso", program: "Programa de formación", language: "Formación en idiomas" } },
   contact: {"title":"Construyamos algo juntos.","description":"Busco oportunidades de desarrollo de software, especialmente en backend y aplicaciones empresariales."},
+  resume: {
+    title: "Currículum Vitae",
+    description: "Conocé mi formación, experiencia en proyectos, habilidades técnicas y perfil profesional.",
+    availableLanguages: "Idiomas disponibles",
+    languages: { es: "Español", en: "Inglés" },
+    view: "Ver CV",
+    download: "Descargar PDF",
+    newTab: "se abre en una pestaña nueva",
+  },
   caseStudy: { problem: "Contexto y problema", solution: "Solución", role: "Mi rol", approach: "Desarrollo con GeneXus", technologies: "Tecnologías utilizadas", architecture: "Arquitectura técnica", flow: "Flujo de trabajo", features: "Funcionalidades principales", rules: "Reglas de negocio", decisions: "Decisiones técnicas", security: "Seguridad", testing: "Calidad de software", lessons: "Aprendizajes", stages: { implemented: "Implementado", development: "En desarrollo", design: "Diseño funcional" }, categories: { laundry: "Software de gestión empresarial", urban: "Gestión de reclamos urbanos", dealership: "Gestión comercial automotriz", career: "Compatibilidad laboral con IA", community: "Innovación ciudadana" }, statuses: { development: "En desarrollo", prototype: "Prototipo", academic: "Diseño académico" }, types: { academic: "Proyecto académico", personal: "Proyecto personal", collaborative: "Proyecto colaborativo", hackathon: "Hackathon" } },
   errors: { notFound: "Página no encontrada", missing: "La página que buscás no está disponible.", error: "Ocurrió un error", tryAgain: "Volver a intentar" },
 };
 
 const en: typeof es = {
   nav: { home: "Home", about: "About", projects: "Projects", skills: "Technologies", education: "Education", contact: "Contact" },
-  ui: { navigation: "Main navigation", footerNav: "Footer navigation", openMenu: "Open menu", closeMenu: "Close menu", language: "Language", theme: "Theme", light: "Switch to light theme", dark: "Switch to dark theme", skip: "Skip to content", cv: "Download résumé", email: "Email", backHome: "Back to home", backProjects: "Back to projects", next: "Next project", viewProject: "View project", exploreFeatures: "Explore features", previousImage: "Previous screenshot", nextImage: "Next screenshot", openImage: "Enlarge screenshot", close: "Close", image: "Screenshot", gallery: "Project screenshots", verify: "Verify credential", credential: "Credential", document: "Open document" },
+  ui: { navigation: "Main navigation", footerNav: "Footer navigation", openMenu: "Open menu", closeMenu: "Close menu", language: "Language", theme: "Theme", light: "Switch to light theme", dark: "Switch to dark theme", skip: "Skip to content", cv: "Download CV", email: "Email", backHome: "Back to home", backProjects: "Back to projects", next: "Next project", viewProject: "View project", exploreFeatures: "Explore features", previousImage: "Previous screenshot", nextImage: "Next screenshot", openImage: "Enlarge screenshot", close: "Close", image: "Screenshot", gallery: "Project screenshots", verify: "Verify credential", credential: "Credential", document: "Open document" },
   meta: {"description":"Software developer focused on backend development, Java, Spring Boot, SQL, and business management applications. Explore my projects, technical skills, and education."},
   hero: {"available":"Open to work","intro":"Hi, I’m Mateo Beccan.","description":"I develop software solutions focused on solving real-world problems, combining application architecture, business logic, databases, and modern technologies.","cta":"Explore projects","profile":"Technical profile"},
   about: {"title":"About me","description":["I build maintainable, secure systems with a focus on backend development, application architecture, and business management.","My Software Development training covered programming, systems analysis, databases, software engineering, and process modeling. I applied these skills to management systems, web platforms, and full-stack applications using Java, Spring Boot, SQL, GeneXus, React, and Vue.js.","I enjoy turning requirements into working software and use version control, documentation, and functional testing along the way. I’m looking to join a team where I can contribute to real projects and continue to grow."],"capabilities":[["Backend development","REST APIs, business logic, security, and layered architecture."],["Business applications","Functional analysis and management systems with GeneXus."],["Database design","Relational modeling, SQL, and data integrity."],["Software engineering","Validation, testing, documentation, and version control."]]},
@@ -28,6 +37,15 @@ const en: typeof es = {
   education: {"title":"Education","status":{"closing":"Finishing coursework","completed":"Completed","degreeAwarded":"Degree awarded"}},
   certifications: { title: "Certifications and courses", categories: { course: "Course", program: "Training program", language: "Language training" } },
   contact: {"title":"Let’s build something together.","description":"I’m open to software development opportunities, especially in backend and business applications."},
+  resume: {
+    title: "Resume",
+    description: "Explore my educational background, project experience, technical skills, and professional profile.",
+    availableLanguages: "Available languages",
+    languages: { es: "Spanish", en: "English" },
+    view: "View Resume",
+    download: "Download PDF",
+    newTab: "opens in a new tab",
+  },
   caseStudy: { problem: "Context and problem", solution: "Solution", role: "My role", approach: "Building with GeneXus", technologies: "Technologies used", architecture: "Technical architecture", flow: "Workflow", features: "Key features", rules: "Business rules", decisions: "Technical decisions", security: "Security", testing: "Software quality", lessons: "Lessons learned", stages: { implemented: "Implemented", development: "In development", design: "Functional design" }, categories: { laundry: "Business Management Software", urban: "Urban issue management", dealership: "Dealership operations", career: "AI-powered job matching", community: "Civic innovation" }, statuses: { development: "In development", prototype: "Prototype", academic: "Academic design" }, types: { academic: "Academic project", personal: "Personal project", collaborative: "Collaborative project", hackathon: "Hackathon" } },
   errors: { notFound: "Page not found", missing: "The page you’re looking for is unavailable.", error: "Something went wrong", tryAgain: "Try again" },
 };
