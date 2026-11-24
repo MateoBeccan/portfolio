@@ -1,8 +1,12 @@
-import { localized as l } from "@/i18n/locales";
+import { localized as l, type LocalizedContent } from "@/i18n/locales";
 import type { Project, ProjectImage } from "@/types/project";
 
 function jobMatchImage(file: string, es: string, en: string): ProjectImage {
   return { src: `/projects/jobmatch-ai/${file}.png`, alt: l(es, en) };
+}
+
+function projectImage(folder: string, file: string, width: number, height: number, title: LocalizedContent, alt: LocalizedContent, caption: LocalizedContent): ProjectImage {
+  return { src: `/projects/${folder}/${file}.webp`, size: { width, height }, title, alt, caption };
 }
 
 export const projects: Project[] = [
@@ -12,6 +16,7 @@ export const projects: Project[] = [
     subtitle: l("Sistema integral de gestión de lavandería", "Laundry Management System"),
     category: "laundry",
     featured: true,
+    status: "functional",
     summary: l("Sistema de gestión desarrollado con GeneXus para centralizar pedidos, cobros, caja y consultas administrativas de una lavandería.", "A laundry management system built with GeneXus that brings orders, payment collection, cash operations, and administrative reporting into one place."),
     description: l("Aplicación web de gestión empresarial que reúne en GeneXus el trabajo diario de una lavandería, desde el alta de pedidos con prendas y servicios hasta los cobros y la consulta de movimientos.", "A GeneXus business management web application that brings everyday laundry operations together, from creating orders with garments and services to recording payments and reviewing transactions."),
     technologies: ["GeneXus"],
@@ -67,9 +72,103 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "concesionaria",
+    title: l("Sistema de Gestión de Concesionaria", "Car Dealership Management System"),
+    shortTitle: l("Concesionaria", "Car Dealership"),
+    category: "dealership",
+    status: "development",
+    repositoryUrl: "https://github.com/MateoBeccan/concesionaria",
+    technologies: ["Java", "Spring Boot", "Vue.js", "MySQL", "JHipster", "Spring Data JPA", "Hibernate", "Liquibase"],
+    summary: l("Operaciones comerciales de una concesionaria, desde la disponibilidad de vehículos hasta la reserva, el cobro y el cierre de la venta.", "Dealership operations from vehicle availability through reservations, payment collection, and sale confirmation."),
+    description: l("Sistema de gestión comercial que conecta el catálogo de vehículos, las unidades en inventario y los clientes con las reservas, ventas y pagos. Un asistente guía la operación y deja visibles el importe pagado y el saldo pendiente.", "A dealership system that connects the vehicle catalog, stock units, and customers with reservations, sales, and payments. A guided sales workflow keeps the amount paid and outstanding balance visible."),
+    problem: l("El equipo comercial necesita conocer la disponibilidad de cada unidad mientras registra señas, recibe pagos en distintas monedas y consulta cuánto falta cobrar para cerrar la operación.", "Sales staff need to know which units are available while recording deposits, accepting payments in different currencies, and tracking how much remains due."),
+    solution: l("Centralizar la operación en un asistente que vincula cliente, unidad y pagos. La API comprueba las condiciones de cada etapa y actualiza los estados de inventario cuando se confirma una reserva o venta.", "A guided workflow connects the customer, vehicle unit, and payments. The API validates each step and updates inventory status when a reservation or sale is confirmed."),
+    role: l("Participé en el modelado, las reglas de negocio y el desarrollo de las vistas administrativas y los endpoints.", "I contributed to domain modeling, business rules, admin views, and API endpoints."),
+    architecture: {
+      steps: ["Vue.js", "Spring Boot REST / JHipster", l("Servicios de dominio", "Domain services"), "JPA / Hibernate", "MySQL"],
+      description: l("La interfaz Vue consume la API REST de un monolito Spring Boot generado con JHipster. Los servicios coordinan inventario, reservas y cobros. JPA/Hibernate persiste el dominio en MySQL y Liquibase versiona el esquema.", "The Vue interface consumes the REST API of a JHipster-generated Spring Boot monolith. Services coordinate inventory, reservations, and payments. JPA/Hibernate persists the domain in MySQL, and Liquibase versions the schema."),
+    },
+    flow: [l("Seleccionar cliente", "Select customer"), l("Elegir unidad disponible", "Choose available unit"), l("Registrar pagos", "Record payments"), l("Confirmar reserva o venta", "Confirm reservation or sale")],
+    features: [{ stage: "implemented", items: l(
+      ["Catálogo de marcas, modelos y vehículos con unidades de inventario y seguimiento de su disponibilidad.", "Gestión de clientes y asistente comercial para seleccionar una unidad, cargar pagos y confirmar la reserva o venta.", "Registro de pagos en distintas monedas, conversión aplicada al saldo y tasación de usados como parte de pago."],
+      ["Catalog of makes, models, and vehicles, with individual stock units and availability tracking.", "Customer management and a guided workflow for selecting a unit, recording payments, and confirming a reservation or sale.", "Payments in multiple currencies, conversion against the outstanding balance, and trade-in appraisals recorded as part of payment."],
+    ) }],
+    dataModel: l(
+      ["Marca, modelo y vehículo describen el catálogo. Inventario representa la unidad comercial disponible y registra sus cambios de estado.", "La operación asocia al cliente con inventario y registra por separado la reserva, la venta y sus pagos. El importe original y el importe aplicado permiten revisar efectos de conversión."],
+      ["Make, model, and vehicle describe the catalog. Inventory represents the stock unit and tracks its status changes.", "An operation links the customer to inventory and records the reservation, sale, and payments separately. Original and applied amounts make the effect of currency conversion traceable."],
+    ),
+    businessRules: l(
+      ["El inventario cambia entre disponible, reservado y vendido según la operación.", "La reserva aplica una seña mínima configurable del 10 % sobre el valor del vehículo y un vencimiento predeterminado de 30 días.", "La venta se confirma con saldo en cero. Un pago convertido no puede exceder el saldo pendiente."],
+      ["Inventory moves through available, reserved, and sold states as the operation progresses.", "A reservation uses a configurable minimum deposit of 10% of the vehicle value and defaults to a 30-day expiry.", "A sale can be confirmed once the outstanding balance is zero. A converted payment cannot exceed the remaining balance."],
+    ),
+    technicalDecisions: l(
+      ["Separar catálogo e inventario permite conservar los datos del vehículo mientras cambia la disponibilidad comercial.", "El historial de inventario registra las transiciones provocadas por reservas y ventas. Los servicios de cobro aplican la conversión antes de actualizar el saldo."],
+      ["Separating catalog and inventory keeps vehicle data stable as commercial availability changes.", "Inventory history records transitions caused by reservations and sales. Payment services apply currency conversion before updating the balance."],
+    ),
+    testing: l(["El código incluye pruebas de servicios para confirmación de ventas, actualización del inventario y registro de pagos, además de pruebas de integración de recursos REST."], ["The repository includes service tests for sale confirmation, inventory synchronization, and payment registration, along with REST resource integration tests."]),
+    lessonsLearned: l(["Modelar la disponibilidad y el cobro como estados independientes permite expresar transiciones comerciales y validarlas en los servicios."], ["Modeling availability and payment as independent states makes commercial transitions explicit and testable at the service layer."]),
+    screenshots: [
+      projectImage("concesionaria", "panel", 1917, 905, l("Panel de operaciones", "Operations dashboard"), l("Panel administrativo con indicadores de inventario, reservas y ventas.", "Admin dashboard with inventory, reservation, and sales indicators."), l("El panel reúne la disponibilidad comercial y los accesos a las operaciones.", "The dashboard brings together stock availability and links to commercial operations.")),
+      projectImage("concesionaria", "seleccion-cliente", 1608, 910, l("Selección de cliente", "Customer selection"), l("Primer paso del asistente de venta con selección de cliente y observaciones.", "First step of the sales wizard with customer selection and notes."), l("El cliente queda asociado a la operación antes de seleccionar el vehículo.", "The wizard links a customer to the operation before vehicle selection.")),
+      projectImage("concesionaria", "seleccion-vehiculo", 1585, 907, l("Selección de unidad", "Vehicle selection"), l("Búsqueda de una unidad disponible dentro del asistente de venta.", "Search for an available vehicle in the sales wizard."), l("La unidad disponible se incorpora al resumen de la operación.", "The available unit is added to the transaction summary.")),
+      projectImage("concesionaria", "registro-pagos", 1586, 907, l("Registro de pagos", "Payment entry"), l("Formulario de pago con método, moneda y resumen de saldo.", "Payment form with method, currency, and balance summary."), l("El sistema conserva la moneda original y muestra el importe aplicado.", "The system retains the original currency and shows the applied amount.")),
+      projectImage("concesionaria", "confirmacion-reserva", 1606, 902, l("Confirmación de reserva", "Reservation confirmation"), l("Diálogo de confirmación con el resumen de operación y el tipo de comprobante.", "Confirmation dialog with transaction summary and receipt type."), l("El cierre presenta los datos de la reserva para su revisión.", "The final step presents the reservation details for review.")),
+    ],
+  },
+  {
+    slug: "hogwarts-library",
+    title: "Hogwarts Library",
+    subtitle: l("Sistema de gestión bibliotecaria", "Library Management System"),
+    category: "library",
+    status: "released",
+    repositoryUrl: "https://github.com/MateoBeccan/hogwarts-library",
+    technologies: ["Java 21", "Spring Boot", "Vue.js", "MySQL", "TypeScript", "Spring Security", "JWT", "Spring Data JPA", "Hibernate", "Liquibase"],
+    summary: l("Catálogo bibliográfico y alquiler de ejemplares físicos, con control de disponibilidad, devoluciones y pagos parciales.", "A library catalog and physical book rental system with availability tracking, returns, and partial payments."),
+    description: l("Aplicación web de gestión bibliotecaria que separa el catálogo de las copias físicas y organiza los alquileres por cliente. Incluye seguimiento de devoluciones y saldos, con acceso diferenciado para administración y atención.", "A library management web application that separates catalog records from physical copies and organizes rentals by customer. It tracks returns and balances, with distinct access for administrators and staff."),
+    problem: l("Una obra puede tener varias copias con distinta disponibilidad. El personal necesita saber qué ejemplar salió, cuándo vuelve y qué saldo queda, incluso si cambia la tarifa de catálogo.", "A title can have several copies with different availability. Staff need to know which copy is out, when it is due back, and what remains payable, even if the catalog rate changes."),
+    solution: l("Un catálogo relaciona libros con ejemplares individuales. El alquiler conserva una línea por copia, registra el precio aplicado y coordina la disponibilidad con los cambios de estado.", "The catalog links books to individual copies. A rental stores one line per copy, retains the applied price, and updates availability as its status changes."),
+    role: l("Implementé la API REST, el flujo de alquiler y pagos, la autenticación por roles y la integración de la interfaz Vue. El historial registra también mi trabajo sobre los códigos de ejemplar y la normalización de autores.", "I implemented the REST API, rental and payment workflows, role-based authentication, and Vue interface integration. The repository history also records my work on copy codes and normalized author records."),
+    architecture: {
+      steps: ["Vue.js / TypeScript", "REST / Spring Security", l("Controladores y DTO", "Controllers and DTOs"), l("Servicios de dominio", "Domain services"), "JPA / MySQL"],
+      description: l("La SPA Vue usa Axios para acceder a una API REST Spring Boot. Los controladores reciben DTO validados y los servicios transaccionales aplican las reglas de alquiler y pago. Spring Data JPA con Hibernate persiste en MySQL. Liquibase gestiona el esquema inicial y sus cambios.", "The Vue SPA uses Axios to call a Spring Boot REST API. Controllers accept validated DTOs, and transactional services enforce rental and payment rules. Spring Data JPA and Hibernate persist to MySQL. Liquibase manages the initial schema and later changes."),
+    },
+    flow: [l("Elegir cliente activo", "Choose active customer"), l("Seleccionar ejemplares", "Select physical copies"), l("Confirmar plazo y total", "Confirm due date and total"), l("Registrar pagos y devolución", "Record payments and return")],
+    features: [{ stage: "implemented", items: l(
+      ["Gestión de libros, categorías, autores, clientes y ejemplares con código individual.", "Creación de alquileres con selección de cliente y ejemplares disponibles. Consulta filtrada por estado, finalización y cancelación.", "Pagos parciales vinculados al alquiler y consulta del saldo. Los roles delimitan el alcance administrativo."],
+      ["Manage books, categories, authors, customers, and individually coded copies.", "Create rentals by selecting a customer and available copies. Filter by status, complete rentals, or cancel them.", "Record partial payments against a rental and review its balance. Staff and administrators have different permissions."],
+    ) }],
+    dataModel: l(
+      ["Cada libro pertenece a una categoría, puede relacionarse con varios autores y agrupa sus ejemplares físicos.", "El alquiler pertenece a un cliente. Cada detalle enlaza un ejemplar y conserva su tarifa histórica. Los pagos registran movimientos independientes sobre el mismo alquiler."],
+      ["Each book belongs to a category, can reference multiple authors, and groups its physical copies.", "A rental belongs to a customer. Each rental line links a copy and retains its historical rate. Individual payments are recorded against the rental."],
+    ),
+    businessRules: l(
+      ["El cliente y el libro deben estar activos. Solo se pueden seleccionar ejemplares disponibles, sin repeticiones y dentro de límites configurables de cantidad y duración.", "La creación pasa los ejemplares a alquilados. Finalizar o cancelar devuelve su disponibilidad.", "El importe de un pago debe ser positivo y no superar el saldo. Un alquiler cancelado rechaza pagos, y uno finalizado puede recibirlos si queda saldo."],
+      ["The customer and book must be active. Only available copies can be selected, with no duplicates and within configurable quantity and duration limits.", "Creating a rental marks its copies as rented. Completing or cancelling a rental restores availability.", "Payment amounts must be positive and within the remaining balance. Cancelled rentals reject payments, and completed rentals can still receive payment if a balance remains."],
+    ),
+    technicalDecisions: l(
+      ["El bloqueo pesimista en las transacciones de alquiler y pago protege la disponibilidad y el saldo frente a operaciones concurrentes.", "El detalle conserva la tarifa diaria aplicada al crear el alquiler. Las migraciones incorporan códigos de ejemplar y normalizan autores."],
+      ["Pessimistic locking in rental and payment transactions protects availability and balances against concurrent operations.", "Each rental line captures the daily rate when the rental is created. Migrations add copy codes and normalize author records."],
+    ),
+    security: l(
+      ["Spring Security autentica la API con JWT y utiliza BCrypt para las contraseñas. ADMIN y EMPLEADO comparten las operaciones habituales, con permisos exclusivos de administración para usuarios y acciones restringidas."],
+      ["Spring Security authenticates API requests with JWT and uses BCrypt for passwords. ADMIN and EMPLEADO can perform day-to-day operations, with user management and restricted actions reserved for administrators."],
+    ),
+    testing: l(["El repositorio incluye pruebas de servicios, autenticación, autorización y migraciones Liquibase."], ["The repository includes service, authentication, authorization, and Liquibase migration tests."]),
+    lessonsLearned: l(["Separar la obra de su unidad física facilita controlar disponibilidad. Guardar la tarifa histórica permite conservar el significado del total a lo largo del tiempo."], ["Separating bibliographic records from physical copies makes availability easier to track. Storing historical rates keeps the rental total meaningful over time."]),
+    screenshots: [
+      projectImage("hogwarts", "ejemplares", 1897, 862, l("Inventario de ejemplares", "Copy inventory"), l("Tabla de ejemplares con códigos, tarifas y estados de disponibilidad.", "Copy inventory table with identification codes, rates, and availability statuses."), l("La vista organiza las copias físicas y ofrece filtros por estado.", "The view lists physical copies and offers status filters.")),
+      projectImage("hogwarts", "alquileres", 1892, 853, l("Listado de alquileres", "Rental list"), l("Tabla de alquileres con fechas de vencimiento, devolución y filtros de estado.", "Rental table with due dates, return dates, and status filters."), l("El personal puede consultar alquileres activos, finalizados y cancelados.", "Staff can review active, completed, and cancelled rentals.")),
+      projectImage("hogwarts", "seleccion-cliente", 1516, 845, l("Selección de cliente", "Customer selection"), l("Primer paso de un alquiler nuevo con búsqueda y selección de un cliente activo.", "First step of a new rental with search and active customer selection."), l("El asistente comienza por asociar un cliente al alquiler.", "The wizard starts by linking a customer to the rental.")),
+      projectImage("hogwarts", "seleccion-ejemplares", 1610, 857, l("Selección de ejemplares", "Copy selection"), l("Tarjetas de ejemplares disponibles y reseña de la selección actual.", "Cards for available copies and a summary of the current selection."), l("La búsqueda admite código de ejemplar, título e ISBN.", "Copies can be found by copy code, title, or ISBN.")),
+      projectImage("hogwarts", "confirmacion-alquiler", 1642, 867, l("Confirmación del alquiler", "Rental confirmation"), l("Formulario de confirmación con vencimiento, ejemplares elegidos y estimación.", "Confirmation form with due date, selected copies, and an estimate."), l("El último paso reúne las condiciones antes de registrar el alquiler.", "The final step gathers the terms before registering the rental.")),
+      projectImage("hogwarts", "inicio-sesion", 1918, 857, l("Inicio de sesión", "Sign-in screen"), l("Formulario de acceso con los campos de usuario y contraseña vacíos.", "Sign-in form with empty username and password fields."), l("El sistema requiere autenticación para acceder a las operaciones.", "Staff sign in to access library operations.")),
+    ],
+  },
+  {
     slug: "cityfix",
     title: "CityFix",
     category: "urban",
+    status: "functional",
     technologies: ["Java 21", "Spring Boot", "Spring Security", "Spring Data JPA", "Hibernate", "MySQL", "JWT", "React", "Vite", "Tailwind CSS", "Swagger / OpenAPI"],
     repositoryUrl: "https://github.com/MateoBeccan/cityfix",
     summary: l("Registro y seguimiento de reclamos urbanos con perfiles diferenciados e historial de estados.", "Urban issue reporting and tracking with distinct user roles and a status history."),
@@ -85,29 +184,10 @@ export const projects: Project[] = [
     technicalDecisions: l(["Conservar un historial permite rastrear los cambios sin perder estados anteriores.", "Swagger/OpenAPI documenta el contrato para que la interfaz y la API puedan evolucionar por separado."], ["A status history makes changes traceable while preserving earlier states.", "Swagger/OpenAPI documents the contract so that the UI and API can evolve independently."]),
   },
   {
-    slug: "concesionaria",
-    title: l("Sistema de Gestión de Concesionaria", "Dealership Management System"),
-    category: "dealership",
-    repositoryUrl: "https://github.com/MateoBeccan/concesionaria",
-    technologies: ["Java", "Spring Boot", "JHipster", "Vue.js", "MySQL"],
-    summary: l("Gestión comercial de vehículos, con inventario, reservas, ventas y pagos vinculados por reglas de negocio.", "Dealership operations with inventory, reservations, sales, and payments governed by shared business rules."),
-    description: l("Sistema de administración automotriz que relaciona vehículos y clientes con el inventario, las reservas, las ventas y sus pagos.", "A dealership management system that connects vehicles and customers to inventory, reservations, sales, and payment records."),
-    problem: l("Las áreas comerciales necesitan saber qué vehículos pueden ofrecer y cuánto queda por cobrar en cada operación.", "Sales teams need to know which vehicles they can offer and how much remains due on each transaction."),
-    solution: l("Representar inventario, reserva, venta y pago como entidades relacionadas. Los servicios verifican las condiciones de cada operación antes de cambiar estados o saldos.", "Inventory, reservations, sales, and payments are modeled as related entities. Services check each operation’s conditions before changing statuses or balances."),
-    role: l("Participé en el modelado, las reglas de negocio y el desarrollo de las vistas administrativas y los endpoints.", "I contributed to domain modeling, business rules, admin views, and API endpoints."),
-    architecture: { steps: ["Vue.js", "Spring Boot / JHipster", l("Servicios de dominio", "Domain services"), "MySQL"], description: l("Monolito con interfaz administrativa Vue.js, API REST y persistencia relacional. Los servicios coordinan las transiciones de inventario y los saldos de las ventas.", "A monolith with a Vue.js admin UI, a REST API, and relational persistence. Services coordinate inventory transitions and sales balances.") },
-    features: [{ stage: "implemented", items: l(["Gestión de inventario, reservas, ventas y pagos.", "Conversión de moneda para registrar pagos y tasación de vehículos usados como parte de pago."], ["Inventory, reservation, sales, and payment management.", "Currency conversion for payments and appraised trade-ins recorded as part of payment."]) }],
-    businessRules: l(
-      ["El inventario cambia entre DISPONIBLE, RESERVADO y VENDIDO según el estado de la operación.", "La reserva exige una seña configurable del 10 % y tiene un plazo predeterminado de 30 días.", "El inventario se marca como vendido cuando la venta está cobrada. El importe convertido de un pago no puede superar el saldo pendiente."],
-      ["Inventory moves through available, reserved, and sold states as the transaction progresses.", "Reservations require a configurable deposit of 10% and default to a 30-day expiry.", "Inventory is marked sold once the sale has been paid in full. A converted payment cannot exceed the outstanding balance."],
-    ),
-    technicalDecisions: l(["El modelo distingue los datos del vehículo de su disponibilidad en inventario. La reserva bloquea una unidad y la venta conserva el historial de pagos y cambios de estado."], ["The model separates vehicle data from inventory availability. A reservation holds an inventory unit, while a sale preserves the history of payments and status changes."]),
-    testing: l(["Pruebas unitarias e integración para entidades, servicios y recursos REST."], ["Unit and integration tests cover entities, services, and REST resources."]),
-  },
-  {
     slug: "jobmatch-ai",
     title: "JobMatch AI",
     category: "career",
+    status: "functional",
     repositoryUrl: "https://github.com/MateoBeccan/jobmatch-ai",
     demoUrl: "https://jobmatch-ai-ten.vercel.app/",
     type: "collaborative",

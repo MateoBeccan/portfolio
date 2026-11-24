@@ -1,9 +1,9 @@
 import type { LocalizedContent } from "@/i18n/locales";
 
 export type Technology = string | LocalizedContent;
-export type ProjectStatus = "development" | "prototype" | "academic";
+export type ProjectStatus = "development" | "prototype" | "academic" | "functional" | "released";
 export type ProjectType = "academic" | "personal" | "collaborative" | "hackathon";
-export type ProjectCategory = "laundry" | "urban" | "dealership" | "career" | "community";
+export type ProjectCategory = "laundry" | "urban" | "dealership" | "career" | "community" | "library";
 export type Implementation = "implemented" | "design" | "development";
 
 export type ProjectImage = {
@@ -18,6 +18,7 @@ export type Project = {
   slug: string;
   title: Technology;
   subtitle?: LocalizedContent;
+  shortTitle?: LocalizedContent;
   summary: LocalizedContent;
   description: LocalizedContent;
   category: ProjectCategory;
@@ -31,6 +32,7 @@ export type Project = {
   architecture?: { steps: Technology[]; description: LocalizedContent };
   developmentApproach?: LocalizedContent;
   flow?: Technology[];
+  dataModel?: LocalizedContent<string[]>;
   features?: { stage: Implementation; items: LocalizedContent<string[]> }[];
   businessRules?: LocalizedContent<string[]>;
   technicalDecisions?: LocalizedContent<string[]>;
@@ -38,6 +40,7 @@ export type Project = {
   testing?: LocalizedContent<string[]>;
   lessonsLearned?: LocalizedContent<string[]>;
   screenshots?: ProjectImage[];
+  coverImage?: ProjectImage;
   repositoryUrl?: string;
   demoUrl?: string;
   event?: LocalizedContent;

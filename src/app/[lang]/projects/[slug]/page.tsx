@@ -6,7 +6,7 @@ import { getProjectBySlug, projects } from "@/data/projects";
 import { dictionaries } from "@/i18n/dictionary";
 import { isLocale } from "@/i18n/locales";
 import { profile } from "@/data/profile";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, siteUrl } from "@/lib/seo";
 import { ProjectLinks, ProjectMeta, ProjectTags } from "@/components/ui/ProjectCard";
 import ProjectCarousel from "@/components/ui/ProjectCarousel";
 import ProjectFlow from "@/components/ui/ProjectFlow";
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props) {
   if (!project) return { title: dictionaries[lang].errors.notFound };
 
   const title = typeof project.title === "string" ? project.title : project.title[lang];
-  const screenshot = project.screenshots?.[0];
+  const screenshot = project.coverImage ?? project.screenshots?.[0];
   const shareImage = screenshot && { url: screenshot.src, alt: screenshot.alt[lang], ...screenshot.size };
   return pageMetadata(lang, `${title} | ${profile.name}`, project.summary[lang], `/projects/${slug}`, shareImage);
 }
@@ -42,7 +42,20 @@ export default async function ProjectPage({ params }: Props) {
   const title = typeof project.title === "string" ? project.title : project.title[lang];
   const next = projects[(projects.indexOf(project) + 1) % projects.length];
   const nextTitle = typeof next.title === "string" ? next.title : next.title[lang];
-  const cover = project.screenshots?.[0];
+  const cover = project.coverImage ?? project.screenshots?.[0];
+  const url = new URL(`/${lang}/projects/${slug}`, siteUrl).href;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `${url}#project`,
+    url,
+    name: title,
+    description: project.summary[lang],
+    inLanguage: lang,
+    genre: copy.categories[project.category],
+    image: cover && new URL(cover.src, siteUrl).href,
+    keywords: project.technologies.map((technology) => typeof technology === "string" ? technology : technology[lang]),
+  };
   const hasDevelopmentApproach = Boolean(project.developmentApproach);
   const context = hasDevelopmentApproach ? "case-context case-context-editorial" : "case-context";
   const prose = [
@@ -51,6 +64,7 @@ export default async function ProjectPage({ params }: Props) {
     { title: copy.role, body: hasDevelopmentApproach ? undefined : project.role },
   ];
   const details = [
+    { title: copy.dataModel, items: project.dataModel },
     { title: copy.rules, items: hasDevelopmentApproach ? undefined : project.businessRules },
     { title: copy.decisions, items: project.technicalDecisions },
     { title: copy.security, items: project.security },
@@ -60,6 +74,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <main id="main-content" tabIndex={-1}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
       <header className="case-hero">
         <div className={cover ? "wrap case-hero-grid" : "wrap"}>
           <Link href={`/${lang}#projects`} prefetch={false} className="text-link"><ArrowLeft size={17} aria-hidden="true" />{ui.backProjects}</Link>
