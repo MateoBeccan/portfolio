@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ChevronRight, Menu, Moon, Sun, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
@@ -18,9 +17,9 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
   cvLanguage?: string;
 }) {
   const pathname = usePathname();
+  const navbar = useRef<HTMLElement>(null);
   const desktopLinks = useRef<HTMLUListElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
-  const pendingSection = useRef<string | null>(null);
   const [active, setActive] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -32,10 +31,6 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
 
   useEffect(() => {
     const sections = isHome ? [...document.querySelectorAll<HTMLElement>("main section[data-nav]")] : [];
-    const destination = pendingSection.current;
-    pendingSection.current = null;
-    if (isHome && destination) document.getElementById(destination)?.focus({ preventScroll: true });
-
     const update = () => {
       setScrolled(window.scrollY > 12);
       if (!sections.length) return;
@@ -70,6 +65,19 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
     return () => observer.disconnect();
   }, [activeSection, nav]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function dismissOnOutsidePress(event: PointerEvent) {
+      if (event.target instanceof Node && !navbar.current?.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", dismissOnOutsidePress);
+    return () => document.removeEventListener("pointerdown", dismissOnOutsidePress);
+  }, [menuOpen]);
+
   function closeMenu(restoreFocus = false) {
     if (restoreFocus) toggle.current?.focus();
     setMenuOpen(false);
@@ -86,35 +94,18 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
 
   function navigateToSection(event: MouseEvent<HTMLAnchorElement>) {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const id = event.currentTarget.hash.slice(1);
-    if (isHome) {
-      document.getElementById(id)?.focus({ preventScroll: true });
-      setActive(id);
-    } else {
-      pendingSection.current = id;
-    }
     closeMenu();
   }
 
   function sectionLinks(mobile = false) {
-    return Object.entries(nav).map(([id, label]) => {
-      const href = `${base}#${id}`;
-      const current = activeSection === id ? (isHome ? "location" : "true") : undefined;
-      const content = (
-        <>
+    return Object.entries(nav).map(([id, label]) => (
+      <li key={id}>
+        <a href={`${base}#${id}`} aria-current={activeSection === id ? (isHome ? "location" : "true") : undefined} onClick={navigateToSection}>
           <span>{label}</span>
           {mobile && <ChevronRight size={17} aria-hidden="true" />}
-        </>
-      );
-
-      return (
-        <li key={id}>
-          {id === "home"
-            ? <a href={href} aria-current={current} onClick={navigateToSection}>{content}</a>
-            : <Link href={href} prefetch={false} aria-current={current} onClick={navigateToSection}>{content}</Link>}
-        </li>
-      );
-    });
+        </a>
+      </li>
+    ));
   }
 
   function languageSwitch(mobile = false) {
@@ -151,6 +142,7 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
     <header className="site-header" data-scrolled={scrolled}>
       <nav
         className="wrap nav-bar"
+        ref={navbar}
         aria-label={ui.navigation}
         onKeyDown={(event) => {
           if (menuOpen && event.key === "Escape") {
@@ -159,7 +151,7 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
           }
         }}
         onBlur={(event) => {
-          if (menuOpen && !event.currentTarget.contains(event.relatedTarget)) closeMenu();
+          if (menuOpen && event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeMenu();
         }}
       >
         <a href={`${base}#home`} className="brand" onClick={navigateToSection}>
