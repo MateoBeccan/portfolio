@@ -1,33 +1,24 @@
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import type { LocalizedContent } from "@/i18n/locales";
 
-export const profile = {
+export type SocialLink = { label: "GitHub" | "LinkedIn"; href: string };
+
+export const profile: {
+  name: string;
+  role: string;
+  specialization: string;
+  location: string;
+  email?: string;
+  cv: Partial<LocalizedContent>;
+} = {
   name: "Mateo Beccan",
   role: "Software Developer",
-  location: "Argentina",
-  github: "https://github.com/MateoBeccan",
-  linkedin: "https://www.linkedin.com/in/mateobeccan/",
-  email: "",
-  availability: "Disponible para oportunidades junior / trainee",
-  primaryStack: ["Java", "Spring Boot", "SQL", "REST APIs", "Git"],
+  specialization: "Backend Development · Java · Spring Boot · SQL",
+  location: "Rosario, Santa Fe, Argentina",
+  email: "mateobeccan@gmail.com",
+  cv: {},
 };
 
-export const navItems = [
-  { label: "Sobre mí", href: "/#about" },
-  { label: "Skills", href: "/#skills" },
-  { label: "Proyectos", href: "/#projects" },
-  { label: "Formación", href: "/#education" },
-  { label: "Contacto", href: "/#contact" },
-];
-
-export const socialLinks = [
-  {
-    label: "GitHub",
-    href: profile.github,
-    icon: FaGithub,
-  },
-  {
-    label: "LinkedIn",
-    href: profile.linkedin,
-    icon: FaLinkedin,
-  },
+export const socialLinks: SocialLink[] = [
+  { label: "GitHub", href: "https://github.com/MateoBeccan" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mateobeccan/" },
 ];

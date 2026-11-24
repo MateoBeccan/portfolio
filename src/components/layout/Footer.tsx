@@ -1,32 +1,24 @@
 import Link from "next/link";
+import { ArrowUp } from "lucide-react";
+import { profile } from "@/data/profile";
+import { dictionaries } from "@/i18n/dictionary";
+import type { Locale } from "@/i18n/locales";
+import BrandMark from "@/components/ui/BrandMark";
 
-import { profile, socialLinks } from "@/data/profile";
-
-export default function Footer() {
-  const year = new Date().getFullYear();
-
+export default function Footer({ locale }: { locale: Locale }) {
+  const { nav, ui } = dictionaries[locale];
   return (
-    <footer className="border-t border-white/8 py-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-500 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-        <p>
-          © {year} {profile.name}. Built with Next.js.
-        </p>
-        <div className="flex items-center gap-4">
-          <Link href="/#home" className="transition hover:text-white">
-            Inicio
-          </Link>
-          {socialLinks.map(({ label, href }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition hover:text-white"
-            >
-              {label}
-            </a>
-          ))}
+    <footer className="site-footer">
+      <div className="wrap footer-inner">
+        <div className="footer-brand">
+          <BrandMark />
+          <div><p className="footer-name">© {new Date().getFullYear()} {profile.name}</p><p>{profile.role}</p></div>
         </div>
+        <nav aria-label={ui.footerNav}>
+          <Link href={`/${locale}#projects`} prefetch={false}>{nav.projects}</Link>
+          <Link href={`/${locale}#contact`} prefetch={false}>{nav.contact}</Link>
+          <Link href={`/${locale}#home`} prefetch={false} className="icon-button" aria-label={ui.backHome}><ArrowUp size={17} aria-hidden="true" /></Link>
+        </nav>
       </div>
     </footer>
   );

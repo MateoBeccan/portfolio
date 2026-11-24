@@ -46,3 +46,6 @@ next-env.d.ts
 # Windows
 desktop.ini
 Thumbs.db
+
+# Original screenshots kept outside the publishable site
+/portfolio-assets-private/

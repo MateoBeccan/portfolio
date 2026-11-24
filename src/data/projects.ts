@@ -1,171 +1,160 @@
-import type { Project } from "@/types/project";
+import { localized as l } from "@/i18n/locales";
+import type { Project, ProjectImage } from "@/types/project";
+
+function jobMatchImage(file: string, es: string, en: string): ProjectImage {
+  return { src: `/projects/jobmatch-ai/${file}.png`, alt: l(es, en) };
+}
 
 export const projects: Project[] = [
   {
-    slug: "jobmatch-ai",
-    title: "JobMatch AI",
-    shortDescription: "Análisis de compatibilidad entre CVs y ofertas laborales con asistencia de IA.",
-    description:
-      "Aplicación orientada a ayudar a comparar perfiles profesionales con búsquedas laborales, resaltando coincidencias, brechas y oportunidades de mejora.",
-    problem:
-      "Leer una oferta, revisar un CV y detectar coincidencias relevantes puede ser lento y subjetivo, especialmente cuando se evalúan varias postulaciones.",
-    solution:
-      "Centralizar el análisis en una experiencia clara que estructura requisitos, habilidades detectadas y recomendaciones accionables.",
-    role:
-      "Diseño de flujo funcional, estructura de datos, integración de análisis asistido por IA y construcción de la experiencia de usuario.",
-    technologies: ["TypeScript", "Next.js", "AI-assisted workflow", "Tailwind CSS"],
-    highlights: [
-      "Producto aplicado a empleabilidad",
-      "Lectura estructurada de requisitos",
-      "Base preparada para iterar con datos reales",
-    ],
-    features: [
-      "Carga y comparación de información profesional",
-      "Análisis de compatibilidad por criterios",
-      "Resumen de fortalezas y brechas",
-      "Recomendaciones orientadas a mejora del perfil",
-    ],
-    technicalDecisions: [
-      "Separación entre datos de entrada, resultado de análisis y presentación",
-      "Interfaz pensada para lectura rápida por secciones",
-      "Preparado para conectar proveedores de IA sin exponer secretos en cliente",
-    ],
-    images: [
-      {
-        src: "/projects/jobmatch-ai/home.png",
-        alt: "Pantalla principal de JobMatch AI con propuesta de análisis de compatibilidad entre CV y oferta laboral.",
-      },
-      {
-        src: "/projects/jobmatch-ai/hom1.png",
-        alt: "Sección de JobMatch AI que explica el flujo desde el CV hasta el próximo paso profesional.",
-      },
-      {
-        src: "/projects/jobmatch-ai/home2.png",
-        alt: "Sección de JobMatch AI con caminos profesionales sugeridos y llamado a analizar el CV.",
-      },
-      {
-        src: "/projects/jobmatch-ai/analisis.png",
-        alt: "Pantalla de nueva evaluación de JobMatch AI para cargar CV y oferta laboral.",
-      },
-      {
-        src: "/projects/jobmatch-ai/carga-analisis.png",
-        alt: "Pantalla de JobMatch AI con análisis en curso comparando habilidades con la oferta.",
-      },
-      {
-        src: "/projects/jobmatch-ai/resultado.png",
-        alt: "Pantalla de resultado de JobMatch AI con compatibilidad estimada y lectura general.",
-      },
-      {
-        src: "/projects/jobmatch-ai/resultado1.png",
-        alt: "Pantalla de JobMatch AI con requisitos detectados, acciones sugeridas y preguntas de entrevista.",
-      },
-    ],
-    github: {
-      label: "GitHub",
-      href: "https://github.com/MateoBeccan/jobmatch-ai",
-    },
-    demo: {
-      label: "Demo",
-      href: "https://jobmatch-ai-ten.vercel.app/",
-    },
+    slug: "mira-que-te-lavo",
+    title: "Mira que te lavo",
+    subtitle: l("Sistema integral de gestión de lavandería", "Laundry Management System"),
+    category: "laundry",
     featured: true,
-  },
-  {
-    slug: "concesionaria",
-    title: "Concesionaria",
-    shortDescription: "Sistema de gestión para vehículos, reservas, ventas, pagos y estados operativos.",
-    description:
-      "Sistema completo para administrar una concesionaria, cubriendo inventario, flujo comercial, pagos, seguridad y conversión de monedas.",
-    problem:
-      "La gestión manual de vehículos, reservas, ventas y pagos dificulta mantener estados consistentes y trazabilidad del negocio.",
-    solution:
-      "Construir una aplicación con backend robusto, persistencia relacional y frontend administrativo para operar el flujo principal.",
-    role:
-      "Participación en el desarrollo full stack, modelado de entidades, endpoints, vistas administrativas y reglas de negocio.",
-    technologies: ["Java", "Spring Boot", "MySQL", "Vue", "JHipster"],
-    highlights: [
-      "Dominio de negocio completo",
-      "Estados y operaciones comerciales",
-      "Stack Java orientado a aplicación real",
+    summary: l("Sistema de gestión desarrollado con GeneXus para centralizar pedidos, cobros, caja y consultas administrativas de una lavandería.", "A laundry management system built with GeneXus that brings orders, payment collection, cash operations, and administrative reporting into one place."),
+    description: l("Aplicación web de gestión empresarial que reúne en GeneXus el trabajo diario de una lavandería, desde el alta de pedidos con prendas y servicios hasta los cobros y la consulta de movimientos.", "A GeneXus business management web application that brings everyday laundry operations together, from creating orders with garments and services to recording payments and reviewing transactions."),
+    technologies: ["GeneXus"],
+    problem: l("Registrar pedidos y consultar cobros son tareas que comparten datos de clientes, prendas y servicios. La operación diaria necesita pasar del mostrador a la administración sin dispersar esa información.", "Entering orders and reviewing payments both rely on shared information about customers, garments, and services. Daily operations need a way to carry those details from the front desk into administration."),
+    solution: l("Un panel central reúne los accesos operativos y administrativos. El personal puede cargar pedidos, consultar los pendientes de cobro y abrir reportes de pedidos, compras y movimientos de caja.", "A central dashboard brings operational and administrative tasks together. Staff can create orders, review pending payments, and open reports on orders, purchases, and cash movements."),
+    features: [{ stage: "implemented", items: l(
+      ["Alta de pedidos con búsqueda de cliente, fecha de entrega y detalle de prendas, servicios y cantidades.",
+       "Consulta de pedidos pendientes de cobro y formulario para registrar un cobro sobre un pedido.",
+       "Consulta de caja con acciones de apertura y cierre. Menú de reportes con historiales de pedidos, compras y movimientos de caja.",
+       "Accesos administrativos a clientes, servicios, proveedores, insumos, compras, pagos y usuarios desde el panel."],
+      ["Order entry with customer search, delivery date, and line items for garments, services, and quantities.",
+       "A list of orders awaiting payment and a form for recording a payment against an order.",
+       "Cash register view with open and close actions. Reports menu with order, purchase, and cash movement histories.",
+       "Dashboard shortcuts to customers, services, suppliers, supplies, purchases, payments, and users."],
+    ) }],
+    flow: [
+      l("Buscar cliente", "Find customer"),
+      l("Cargar prendas y servicios", "Add garments and services"),
+      l("Guardar pedido", "Save order"),
+      l("Consultar y registrar cobro", "Review and record payment"),
     ],
-    features: [
-      "Gestión de vehículos e inventario",
-      "Reservas y ventas",
-      "Pagos y control de estados",
-      "Conversión de monedas",
-      "Seguridad de acceso",
+    developmentApproach: l("El desarrollo low-code con GeneXus organiza la operación en vistas específicas para registrar pedidos, revisar cobros y consultar caja. El diseño separa la captura de datos de las vistas de consulta y reportes.", "Low-code development with GeneXus organizes the workflow into dedicated views for creating orders, reviewing payments, and checking cash operations. The interface separates data entry from review and reporting."),
+    businessRules: l(
+      ["El pedido identifica al cliente y reúne líneas con prenda, servicio y cantidad.", "La consulta de cobros pendientes muestra el saldo por pedido y permite abrir el registro de un cobro asociado."],
+      ["An order identifies the customer and groups line items by garment, service, and quantity.", "The pending payments view shows each order’s outstanding balance and links to its payment form."],
+    ),
+    lessonsLearned: l(
+      ["Separar la carga del pedido de la consulta de cobros permite adaptar cada pantalla a su tarea y conservar el vínculo entre ambas operaciones."],
+      ["Separating order entry from payment review lets each screen focus on its task while keeping the two operations linked."],
+    ),
+    screenshots: [
+      {
+        src: "/projects/lavanderia/panel.webp",
+        title: l("Panel de operaciones", "Operations dashboard"),
+        alt: l("Panel principal con accesos a nuevo pedido, caja y gestión administrativa.", "Main dashboard with shortcuts to new orders, cash operations, and administration."),
+        caption: l("El panel separa accesos rápidos, administración y reportes.", "The dashboard groups shortcuts, administration, and reporting."),
+        size: { width: 1400, height: 1069 },
+      },
+      {
+        src: "/projects/lavanderia/pedido.webp",
+        title: l("Alta de pedido", "Order entry"),
+        alt: l("Formulario de alta con búsqueda de cliente, fecha de entrega y detalle de prendas, servicios y cobro.", "Order form with customer search, delivery date, and sections for garments, services, and payment."),
+        caption: l("El formulario reúne los datos de entrega y las líneas de servicio en una sola vista.", "The form brings delivery details and service line items together in one view."),
+        size: { width: 1400, height: 1171 },
+      },
+      {
+        src: "/projects/lavanderia/reportes.webp",
+        title: l("Historiales y reportes", "Histories and reports"),
+        alt: l("Menú con accesos a los historiales de pedidos, movimientos de caja y compras.", "Menu linking to order, cash movement, and purchase histories."),
+        caption: l("El menú da acceso a los tres historiales administrativos.", "The menu links to the three administrative histories."),
+        size: { width: 1400, height: 670 },
+      },
     ],
-    technicalDecisions: [
-      "Modelo relacional para entidades principales del negocio",
-      "Separación de responsabilidades entre backend y frontend",
-      "Uso de JHipster para acelerar estructura base y convenciones",
-    ],
-    images: [],
-    featured: true,
   },
   {
     slug: "cityfix",
     title: "CityFix",
-    shortDescription: "Gestión y seguimiento de reclamos ciudadanos con autenticación y estados.",
-    description:
-      "Aplicación para registrar, organizar y consultar reclamos ciudadanos, con foco en seguimiento claro y operación por estado.",
-    problem:
-      "Los reclamos ciudadanos necesitan trazabilidad, categorías y estados visibles para que el seguimiento no dependa de canales informales.",
-    solution:
-      "Una plataforma web con autenticación, carga de reclamos y visualización de progreso para ordenar el ciclo de atención.",
-    role:
-      "Desarrollo de backend y frontend, integración de autenticación JWT y construcción de vistas con React.",
-    technologies: ["Spring Boot", "React", "Vite", "Tailwind CSS", "JWT"],
-    highlights: ["Autenticación JWT", "Flujo de reclamos por estado", "Aplicación web full stack"],
-    features: [
-      "Registro y consulta de reclamos",
-      "Clasificación por estado",
-      "Autenticación de usuarios",
-      "Interfaz responsive para gestión",
-    ],
-    technicalDecisions: [
-      "JWT para proteger rutas y acciones",
-      "API REST como contrato entre frontend y backend",
-      "Tailwind para mantener consistencia visual y velocidad de iteración",
-    ],
-    images: [],
-    featured: true,
+    category: "urban",
+    technologies: ["Java 21", "Spring Boot", "Spring Security", "Spring Data JPA", "Hibernate", "MySQL", "JWT", "React", "Vite", "Tailwind CSS", "Swagger / OpenAPI"],
+    repositoryUrl: "https://github.com/MateoBeccan/cityfix",
+    summary: l("Registro y seguimiento de reclamos urbanos con perfiles diferenciados e historial de estados.", "Urban issue reporting and tracking with distinct user roles and a status history."),
+    description: l("Plataforma donde vecinos reportan incidencias y operadores gestionan su resolución. La API aplica permisos por perfil y mantiene el historial de cada reclamo.", "A platform where residents report local issues and operators manage their resolution. The API enforces role-based permissions and records each issue’s history."),
+    problem: l("Los reportes dispersos entre distintos canales dificultan saber quién debe atender una incidencia y en qué estado se encuentra.", "When reports arrive through different channels, it is difficult to see who is responsible for an issue and where it stands."),
+    solution: l("Un flujo que conecta el alta, la clasificación y la gestión operativa de los reclamos con una vista de seguimiento.", "One workflow connects submission, categorization, and operator actions with a view for tracking progress."),
+    role: l("Desarrollé la API, la integración JWT y la interfaz en React.", "I built the API, JWT integration, and React interface."),
+    architecture: { steps: ["React", "REST API / Spring Security", l("Servicios", "Services"), "JPA / MySQL"], description: l("Los controladores exponen el contrato REST. Los servicios gestionan reclamos y cambios de estado, y JPA persiste los datos en MySQL.", "Controllers expose the REST contract. Services manage reports and status changes, and JPA stores the data in MySQL.") },
+    flow: [l("Ciudadano registra el reclamo", "Resident submits a report"), l("La API valida y registra", "API validates and saves"), l("Operador gestiona", "Operator reviews"), l("Se actualiza el estado", "Status is updated"), l("Ciudadano consulta el progreso", "Resident checks progress")],
+    features: [{ stage: "implemented", items: l(["Registro y consulta de reclamos por categoría y estado.", "Historial de cambios y gestión de estados por operadores.", "Feed comunitario con comentarios y apoyos."], ["Submission and lookup of reports by category and status.", "Status history and operator-led updates.", "Community feed with comments and reactions."]) }],
+    businessRules: l(["El rol CIUDADANO administra sus reclamos. OPERADOR puede consultar los reclamos y actualizar estados. ADMIN cuenta con permisos de administración."], ["The CIUDADANO role manages its own reports. OPERADOR can review reports and update their status. ADMIN has administrative permissions."]),
+    security: l(["JWT y autorización en los endpoints según perfil y propiedad del reclamo."], ["JWT and endpoint authorization based on role and report ownership."]),
+    technicalDecisions: l(["Conservar un historial permite rastrear los cambios sin perder estados anteriores.", "Swagger/OpenAPI documenta el contrato para que la interfaz y la API puedan evolucionar por separado."], ["A status history makes changes traceable while preserving earlier states.", "Swagger/OpenAPI documents the contract so that the UI and API can evolve independently."]),
   },
   {
-    slug: "sistema-lavanderia",
-    title: "Sistema de Lavandería",
-    shortDescription: "Análisis y diseño de sistema integral para operación de lavandería.",
-    description:
-      "Proyecto académico centrado en relevar, modelar y diseñar un sistema de gestión integral para una lavandería.",
-    problem:
-      "Una operación con clientes, pedidos, caja, maquinaria e inventario requiere procesos claros para evitar pérdidas de información.",
-    solution:
-      "Diseño de un sistema que organiza módulos principales, roles y trazabilidad para acompañar el funcionamiento completo.",
-    role:
-      "Análisis funcional, modelado de módulos, definición de procesos y documentación del sistema.",
-    technologies: ["Análisis de sistemas", "SQL", "Modelado", "Documentación"],
-    highlights: [
-      "Proyecto académico integral",
-      "Foco en análisis funcional",
-      "Cobertura de múltiples módulos",
+    slug: "concesionaria",
+    title: l("Sistema de Gestión de Concesionaria", "Dealership Management System"),
+    category: "dealership",
+    repositoryUrl: "https://github.com/MateoBeccan/concesionaria",
+    technologies: ["Java", "Spring Boot", "JHipster", "Vue.js", "MySQL"],
+    summary: l("Gestión comercial de vehículos, con inventario, reservas, ventas y pagos vinculados por reglas de negocio.", "Dealership operations with inventory, reservations, sales, and payments governed by shared business rules."),
+    description: l("Sistema de administración automotriz que relaciona vehículos y clientes con el inventario, las reservas, las ventas y sus pagos.", "A dealership management system that connects vehicles and customers to inventory, reservations, sales, and payment records."),
+    problem: l("Las áreas comerciales necesitan saber qué vehículos pueden ofrecer y cuánto queda por cobrar en cada operación.", "Sales teams need to know which vehicles they can offer and how much remains due on each transaction."),
+    solution: l("Representar inventario, reserva, venta y pago como entidades relacionadas. Los servicios verifican las condiciones de cada operación antes de cambiar estados o saldos.", "Inventory, reservations, sales, and payments are modeled as related entities. Services check each operation’s conditions before changing statuses or balances."),
+    role: l("Participé en el modelado, las reglas de negocio y el desarrollo de las vistas administrativas y los endpoints.", "I contributed to domain modeling, business rules, admin views, and API endpoints."),
+    architecture: { steps: ["Vue.js", "Spring Boot / JHipster", l("Servicios de dominio", "Domain services"), "MySQL"], description: l("Monolito con interfaz administrativa Vue.js, API REST y persistencia relacional. Los servicios coordinan las transiciones de inventario y los saldos de las ventas.", "A monolith with a Vue.js admin UI, a REST API, and relational persistence. Services coordinate inventory transitions and sales balances.") },
+    features: [{ stage: "implemented", items: l(["Gestión de inventario, reservas, ventas y pagos.", "Conversión de moneda para registrar pagos y tasación de vehículos usados como parte de pago."], ["Inventory, reservation, sales, and payment management.", "Currency conversion for payments and appraised trade-ins recorded as part of payment."]) }],
+    businessRules: l(
+      ["El inventario cambia entre DISPONIBLE, RESERVADO y VENDIDO según el estado de la operación.", "La reserva exige una seña configurable del 10 % y tiene un plazo predeterminado de 30 días.", "El inventario se marca como vendido cuando la venta está cobrada. El importe convertido de un pago no puede superar el saldo pendiente."],
+      ["Inventory moves through available, reserved, and sold states as the transaction progresses.", "Reservations require a configurable deposit of 10% and default to a 30-day expiry.", "Inventory is marked sold once the sale has been paid in full. A converted payment cannot exceed the outstanding balance."],
+    ),
+    technicalDecisions: l(["El modelo distingue los datos del vehículo de su disponibilidad en inventario. La reserva bloquea una unidad y la venta conserva el historial de pagos y cambios de estado."], ["The model separates vehicle data from inventory availability. A reservation holds an inventory unit, while a sale preserves the history of payments and status changes."]),
+    testing: l(["Pruebas unitarias e integración para entidades, servicios y recursos REST."], ["Unit and integration tests cover entities, services, and REST resources."]),
+  },
+  {
+    slug: "jobmatch-ai",
+    title: "JobMatch AI",
+    category: "career",
+    repositoryUrl: "https://github.com/MateoBeccan/jobmatch-ai",
+    demoUrl: "https://jobmatch-ai-ten.vercel.app/",
+    type: "collaborative",
+    technologies: ["Java 21", "Spring Boot", "React", "TypeScript", "Vite", "Google Gemini"],
+    summary: l("Compara un CV con una oferta laboral y explica qué requisitos se cumplen, qué falta y cómo preparar la postulación.", "Compares a résumé with a job posting and explains which requirements are met, where gaps remain, and how to prepare an application."),
+    description: l("Proyecto colaborativo de CoderCup AI. La herramienta organiza la comparación de un CV con una vacante para que el candidato pueda revisar la evidencia detrás del resultado.", "A collaborative CoderCup AI project. The application compares a résumé with a job posting so candidates can review the evidence behind the result."),
+    problem: l("Comparar CV y oferta requiere distinguir requisitos críticos, experiencia demostrable y brechas que pueden pasar inadvertidas.", "Comparing a résumé with a job posting involves spotting critical requirements, supporting evidence, and gaps that can be easy to miss."),
+    solution: l("La persona carga su CV e ingresa la oferta como texto o imagen. La aplicación organiza requisitos, evidencias y brechas en una vista de compatibilidad con recomendaciones.", "Candidates upload a résumé and provide the job description as text or an image. The application organizes requirements, evidence, and gaps into a compatibility report with practical recommendations."),
+    role: l("Contribuí al backend con validación de evidencias, explicaciones del análisis, calibración de puntuación para requisitos críticos y pruebas de evaluación.", "I contributed to the backend by validating evidence, explaining results, calibrating scores for critical requirements, and adding evaluation tests."),
+    architecture: { steps: ["React / Vite", "Spring Boot REST API", "Google Gemini", l("Validación y puntuación", "Validation and scoring")], description: l("Spring Boot procesa el PDF y orquesta el análisis con Gemini. La API valida la respuesta estructurada y calcula la compatibilidad mediante reglas explícitas antes de devolver el resultado a React.", "Spring Boot processes the PDF and orchestrates analysis with Gemini. The API validates the structured response and applies explicit scoring rules before returning the result to React.") },
+    flow: [l("Carga de CV", "Upload résumé"), l("Ingreso de oferta", "Enter job posting"), l("Extracción y comparación", "Extract and compare"), l("Revisión de compatibilidad", "Review compatibility"), l("Fortalezas, brechas y recomendaciones", "Strengths, gaps, and recommendations")],
+    features: [{ stage: "implemented", items: l(["Carga de CV en PDF y de la oferta como texto o imagen.", "Resumen de compatibilidad, requisitos y recomendaciones de postulación."], ["PDF résumé upload and job description input as text or image.", "Compatibility summary, requirements breakdown, and application recommendations."]) }],
+    technicalDecisions: l(["Separar la extracción asistida de la puntuación permite explicar cómo incide cada requisito en el resultado.", "La interfaz desglosa compatibilidad, evidencias y próximos pasos para que cada resultado pueda revisarse por partes."], ["Separating assisted extraction from scoring makes it possible to explain how each requirement affects the result.", "The interface breaks the result into compatibility, supporting evidence, and next steps so each part can be reviewed independently."]),
+    testing: l(["Pruebas de regresión y casos de evaluación para la validación de evidencias y las reglas de compatibilidad."], ["Regression and evaluation cases cover evidence validation and matching rules."]),
+    screenshots: [
+      { ...jobMatchImage("home", "Inicio de JobMatch AI, con acceso al análisis del CV.", "JobMatch AI homepage with a link to start a résumé analysis."), size: { width: 1919, height: 1079 } },
+      jobMatchImage("hom1", "Explicación de los pasos del análisis.", "Overview of the analysis steps."),
+      jobMatchImage("home2", "Sección de exploración de caminos profesionales.", "Career path exploration section."),
+      jobMatchImage("analisis", "Formulario para adjuntar el CV e ingresar la oferta laboral.", "Form for uploading a résumé and entering a job posting."),
+      jobMatchImage("carga-analisis", "Estado de carga durante el análisis de compatibilidad.", "Loading state during compatibility analysis."),
+      jobMatchImage("resultado", "Resultado con evaluación de compatibilidad y lectura general.", "Results screen with compatibility assessment and an overview."),
+      jobMatchImage("resultado1", "Requisitos detectados, acciones sugeridas y preguntas de entrevista.", "Identified requirements, suggested actions, and interview questions."),
     ],
+  },
+  {
+    slug: "conectaros",
+    title: "ConectaRos",
+    category: "community",
+    repositoryUrl: "https://github.com/Dieguito678/ConectaRos",
+    type: "hackathon",
+    status: "prototype",
+    event: l("Shippear · Rosario · 24 de octubre de 2026", "Shippear · Rosario · October 24, 2026"),
+    technologies: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "PostgreSQL", "Vercel"],
+    summary: l("Prototipo ciudadano para registrar y seguir incidencias barriales, con una propuesta de participación de comercios.", "A civic prototype for reporting and tracking neighborhood issues, with a proposal for involving local businesses."),
+    description: l("Prototipo desarrollado en equipo en Shippear, Rosario. Explora cómo compartir incidencias entre vecinos y cómo sumar comercios a través de incentivos comunitarios.", "A team prototype developed at Shippear in Rosario. It explores how neighbors can share local issues and how community incentives could involve local businesses."),
+    problem: l("La información sobre incidencias barriales suele circular dispersa y es difícil seguir su evolución.", "Information about neighborhood issues tends to be scattered, making progress difficult to follow."),
+    solution: l("Un listado comunitario filtrable y una cuenta para registrar reclamos y consultar el historial propio.", "A filterable community listing and accounts for submitting reports and checking their history."),
+    role: l("Participé en el equipo que definió y construyó el prototipo durante el hackathon.", "I was part of the team that scoped and built the prototype during the hackathon."),
+    architecture: { steps: ["React / Vite", "Supabase Auth", "PostgreSQL / Supabase"], description: l("La interfaz consulta los reclamos publicados a través de Supabase. La sesión habilita el formulario de alta y el acceso a los reclamos propios.", "The UI reads published reports through Supabase. A signed-in session enables report submission and access to the resident’s own reports.") },
     features: [
-      "Clientes y proveedores",
-      "Pedidos e inventario",
-      "Cobros, caja y reportes",
-      "Maquinaria y auditoría",
+      { stage: "implemented", items: l(["Listado de incidencias con filtros por barrio, categoría y estado.", "Autenticación, registro de reclamos y consulta del historial propio."], ["Issue listing with neighborhood, category, and status filters.", "Authentication, report submission, and a history of the user’s own reports."]) },
+      { stage: "design", items: l(["Comentarios y apoyos de la comunidad.", "Comercios embajadores, incentivos y canje de beneficios."], ["Community comments and reactions.", "Local business ambassadors, incentives, and rewards redemption."]) },
     ],
-    technicalDecisions: [
-      "Separación por módulos del negocio",
-      "Priorización de trazabilidad y reportes",
-      "Base preparada para implementación progresiva",
-    ],
-    images: [],
-    featured: false,
+    technicalDecisions: l(["Supabase concentra autenticación y persistencia para acotar la infraestructura del MVP.", "El equipo priorizó un recorrido completo de consulta y registro para evaluar la idea durante el evento."], ["Supabase provides authentication and persistence, keeping the MVP infrastructure small.", "The team prioritized an end-to-end browsing and submission flow to test the idea during the event."]),
+    lessonsLearned: l(["Delimitar el flujo mínimo permitió al equipo concentrar el tiempo del hackathon en una experiencia demostrable."], ["Scoping a minimal workflow helped the team use the hackathon time to build something it could demonstrate."]),
   },
 ];
-
-export const featuredProjects = projects.filter((project) => project.featured);
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);

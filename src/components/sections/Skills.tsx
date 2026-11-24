@@ -1,34 +1,48 @@
+import { Blocks, Brain, Database, FlaskConical, PanelsTopLeft, Server, Terminal, Workflow, type LucideIcon } from "lucide-react";
+import { skillGroups } from "@/data/skills";
 import SectionTitle from "@/components/ui/SectionTitle";
 import SkillBadge from "@/components/ui/SkillBadge";
-import { skillGroups } from "@/data/skills";
+import { dictionaries } from "@/i18n/dictionary";
+import type { Locale } from "@/i18n/locales";
 
-export default function Skills() {
+const icons = { backend: Server, enterprise: Workflow, database: Database, testing: FlaskConical, frontend: PanelsTopLeft, tools: Terminal, extras: Blocks, ai: Brain };
+const technologyIcons: Record<string, string | LucideIcon> = {
+  Java: "java",
+  "Spring Boot": "spring-boot",
+  GeneXus: Workflow,
+  SQL: Database,
+  PostgreSQL: "postgresql",
+  MySQL: "mysql",
+  "SQL Server": Server,
+};
+
+export default function Skills({ locale }: { locale: Locale }) {
+  const { stack } = dictionaries[locale];
   return (
-    <section id="skills" className="border-t border-white/8 py-20 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionTitle
-          eyebrow="Tech stack"
-          title="Tecnologías organizadas por contexto, no por porcentajes."
-          description="Mi eje profesional está en Java, Spring Boot, SQL y desarrollo de software. El resto del stack acompaña la construcción de aplicaciones completas."
-        />
-
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {skillGroups.map((group) => (
-            <article
-              key={group.title}
-              className="rounded-lg border border-white/10 bg-white/[0.035] p-5"
-            >
-              <h3 className="text-lg font-semibold text-white">{group.title}</h3>
-              <p className="mt-2 min-h-12 text-sm leading-6 text-slate-400">{group.description}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
-                  <SkillBadge key={skill} emphasis={group.emphasis}>
-                    {skill}
-                  </SkillBadge>
-                ))}
-              </div>
-            </article>
-          ))}
+    <section className="section bordered" id="skills" data-nav tabIndex={-1}>
+      <div className="wrap">
+        <SectionTitle title={stack.title} />
+        <div className="stack-grid">
+          {skillGroups.map(({ icon, level, title, technologies }) => {
+            const Icon = icons[icon];
+            return (
+              <article key={icon} className="stack-category" data-category={icon} data-level={level}>
+                <div className="stack-heading"><Icon size={20} aria-hidden="true" /><div><h3>{title[locale]}</h3><p>{stack.levels[level]}</p></div></div>
+                <div className="tag-row">{technologies.map((technology) => {
+                  const label = typeof technology === "string" ? technology : technology[locale];
+                  const Mark = technologyIcons[label];
+                  return <SkillBadge key={label}>
+                    {typeof Mark === "string" ? (
+                      <svg width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <use href={`/images/technology-marks.svg#${Mark}`} />
+                      </svg>
+                    ) : Mark && <Mark size={16} aria-hidden="true" />}
+                    {label}
+                  </SkillBadge>;
+                })}</div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

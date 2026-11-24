@@ -1,0 +1,5 @@
+/portfolio-assets-private/
+/build/
+/.idea/
+.env*
+

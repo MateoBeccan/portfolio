@@ -1,85 +1,67 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowUpRight, Building2, CarFront, Layers3, MapPin, ScanText } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import type { Project, Technology } from "@/types/project";
+import { dictionaries } from "@/i18n/dictionary";
+import type { Locale } from "@/i18n/locales";
+import SkillBadge from "./SkillBadge";
 
-import ProjectCarousel from "@/components/ui/ProjectCarousel";
-import SkillBadge from "@/components/ui/SkillBadge";
-import type { Project } from "@/types/project";
+const icons = { laundry: Layers3, urban: MapPin, dealership: CarFront, career: ScanText, community: Building2 };
 
-type ProjectCardProps = {
-  project: Project;
-  compact?: boolean;
-};
+export function ProjectTags({ technologies, locale }: { technologies: Technology[]; locale: Locale }) {
+  return <div className="tag-row">{technologies.map((item) => {
+    const label = typeof item === "string" ? item : item[locale];
+    return <SkillBadge key={label}>{label}</SkillBadge>;
+  })}</div>;
+}
 
-export default function ProjectCard({ project, compact = false }: ProjectCardProps) {
+export function ProjectLinks({ project }: { project: Project }) {
+  return <>
+    {project.repositoryUrl && <a className="text-link" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer"><FaGithub size={16} aria-hidden="true" />GitHub<ArrowUpRight size={14} aria-hidden="true" /></a>}
+    {project.demoUrl && <a className="text-link" href={project.demoUrl} target="_blank" rel="noopener noreferrer">Demo<ArrowUpRight size={14} aria-hidden="true" /></a>}
+  </>;
+}
+
+export function ProjectMeta({ project, locale }: { project: Project; locale: Locale }) {
+  const { caseStudy } = dictionaries[locale];
+  return <div className="project-meta">
+    <span>{caseStudy.categories[project.category]}</span>
+    {project.type && <span>{caseStudy.types[project.type]}</span>}
+    {project.status && <span>{caseStudy.statuses[project.status]}</span>}
+  </div>;
+}
+
+export default function ProjectCard({ project, locale }: { project: Project; locale: Locale }) {
+  const copy = dictionaries[locale];
+  const title = typeof project.title === "string" ? project.title : project.title[locale];
+  const image = project.screenshots?.[0];
+  const Icon = icons[project.category];
+
   return (
-    <article className="grid gap-6 rounded-lg border border-white/10 bg-white/[0.035] p-4 transition hover:border-blue-300/35 hover:bg-white/[0.055] sm:p-5 lg:grid-cols-[0.95fr_1.05fr]">
-      {!compact ? (
-        <ProjectCarousel
-          title={project.title}
-          images={project.images}
-          priority={project.slug === "jobmatch-ai"}
-        />
-      ) : null}
-
-      <div className="flex flex-col">
-        <div>
-          <div className="mb-3 flex flex-wrap gap-2">
-            {project.technologies.slice(0, compact ? 4 : 6).map((technology) => (
-              <SkillBadge key={technology} emphasis={["Java", "Spring Boot", "SQL", "MySQL"].includes(technology)}>
-                {technology}
-              </SkillBadge>
-            ))}
-          </div>
-          <h3 className="text-2xl font-semibold text-white">{project.title}</h3>
-          <p className="mt-3 text-sm leading-7 text-slate-400 sm:text-base">
-            {project.shortDescription}
-          </p>
-        </div>
-
-        <ul className="mt-5 space-y-2 text-sm text-slate-300">
-          {project.highlights.slice(0, 3).map((highlight) => (
-            <li key={highlight} className="flex gap-2">
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-300" />
-              <span>{highlight}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href={`/projects/${project.slug}`}
-            className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-medium text-black transition hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
-          >
-            Ver detalle
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
-
-          {project.github ? (
-            <a
-              href={project.github.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/[0.08]"
-            >
-              <FaGithub size={16} aria-hidden="true" />
-              {project.github.label}
-            </a>
-          ) : null}
-
-          {project.demo ? (
-            <a
-              href={project.demo.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/[0.08]"
-            >
-              <ExternalLink size={16} aria-hidden="true" />
-              {project.demo.label}
-            </a>
-          ) : null}
+    <article className={project.featured ? "project-card project-featured" : "project-card"} data-project={project.category}>
+      <div className="project-copy">
+        {project.featured && <div className="project-card-kicker">
+          <span className="panel-symbol"><Icon size={21} aria-hidden="true" /></span>
+          <span className="eyebrow">{copy.projects.feature}</span>
+        </div>}
+        <ProjectMeta project={project} locale={locale} />
+        <h3>{title}</h3>
+        <p>{project.summary[locale]}</p>
+        <ProjectTags technologies={project.technologies.slice(0, project.featured ? 6 : 4)} locale={locale} />
+        <div className="project-actions">
+          <Link href={`/${locale}/projects/${project.slug}`} prefetch={false} className={project.featured ? "button primary" : "text-link"}>{copy.ui.viewProject}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> — {title}</span></Link>
+          <ProjectLinks project={project} />
         </div>
       </div>
+      {image ? (
+        <div className="card-art">
+          <div className="card-image">
+            <Image src={image.src} alt={image.alt[locale]} fill
+              sizes="(max-width: 670px) 80vw, (max-width: 1200px) 48vw, 570px" />
+          </div>
+        </div>
+      ) : <div className="card-art card-art-symbol" aria-hidden="true"><Icon size={62} strokeWidth={1.35} /></div>}
     </article>
   );
 }
