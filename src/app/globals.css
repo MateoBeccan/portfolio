@@ -257,11 +257,31 @@ a, button, summary { -webkit-tap-highlight-color: transparent; }
   display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 11px;
   color: var(--accent); background: var(--elevated); border: 1px solid var(--border);
 }
-.about-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: clamp(32px, 8vw, 112px); }
+.about-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .62fr);
+  gap: clamp(24px, 3vw, 38px) clamp(24px, 6vw, 78px); align-items: center;
+}
 .about-copy > p { margin-top: 16px; max-width: 57ch; color: var(--muted); }
 .about-copy > p:first-of-type { margin-top: 22px; color: var(--text); font-size: clamp(1.12rem, 2vw, 1.42rem); line-height: 1.5; letter-spacing: -.026em; }
-.capabilities { border-top: 1px solid var(--border); align-self: center; }
-.capabilities article { display: grid; grid-template-columns: 24px 1fr; align-items: start; gap: 14px; padding-block: 15px; border-bottom: 1px solid var(--subtle-border); }
+.about-portrait {
+  position: relative; isolation: isolate; justify-self: center;
+  width: min(100%, 19.625rem);
+}
+.about-portrait::before {
+  content: ""; position: absolute; z-index: -1; inset: 9% -6% 0; pointer-events: none;
+  background: radial-gradient(ellipse at 54% 53%, color-mix(in srgb, var(--art-glow) 68%, transparent), transparent 70%);
+  filter: blur(18px);
+}
+:root[data-theme="light"] .about-portrait::before { opacity: .66; }
+.about-portrait img {
+  display: block; width: 100%; height: auto;
+  mask-image: linear-gradient(#000 81%, rgb(0 0 0 / .92) 87%, transparent);
+}
+.capabilities {
+  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 clamp(14px, 2vw, 26px); border-top: 1px solid var(--border);
+}
+.capabilities article { display: grid; grid-template-columns: 21px minmax(0, 1fr); align-items: start; gap: 10px; padding-block: 14px; border-bottom: 1px solid var(--subtle-border); }
 .capabilities svg, .stack-heading svg, .credential-grid svg { color: var(--accent); flex: none; }
 .capabilities h3 { font-size: 1.05rem; margin-bottom: 5px; text-wrap: initial; }
 .capabilities p, .credential-grid p { color: var(--muted); font-size: .88rem; line-height: 1.5; }
@@ -560,12 +580,15 @@ a, button, summary { -webkit-tap-highlight-color: transparent; }
   .case-hero-grid { grid-template-columns: 1fr; }
   .case-hero-grid > .case-cover { grid-column: 1; grid-row: auto; max-width: 570px; margin-block: 16px 4px; }
   .stack-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .capabilities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-panel:has(.resume-card) { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 670px) {
   .hero { padding-block: 39px 53px; }
   .hero::before { inset-inline-start: 36%; mask-image: linear-gradient(90deg, transparent, black); }
   .hero-grid, .about-grid, .education-grid, .case-context { grid-template-columns: 1fr; }
+  .about-portrait { width: min(66%, 13.125rem); }
+  .about-portrait::before { inset-inline: -5%; filter: blur(14px); }
   .hero-grid { gap: 28px; }
   .hero-visual { grid-area: auto; }
   .hero h1 { font-size: clamp(3.48rem, 12.8vw, 5.45rem); }
@@ -593,6 +616,7 @@ a, button, summary { -webkit-tap-highlight-color: transparent; }
   .hero-actions { gap: 8px; }
   .hero-actions .button { padding-inline: 12px; }
   .stack-grid { grid-template-columns: minmax(0, 1fr); }
+  .capabilities { grid-template-columns: minmax(0, 1fr); }
   .credential-grid { grid-template-columns: 1fr; }
   .education-card > .panel-symbol { width: 36px; height: 36px; }
 }

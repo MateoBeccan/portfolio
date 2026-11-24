@@ -12,6 +12,7 @@ const es = {
   },
   about: {
     title: "Sobre mí",
+    portraitAlt: "Retrato profesional de Mateo Beccan",
     description: [
       "Soy desarrollador de software egresado de la Tecnicatura en Desarrollo de Software del Instituto Superior Brigadier López. Me especializo en backend y aplicaciones empresariales.",
       "En mis proyectos con Java, Spring Boot y bases de datos relacionales, diseño APIs REST y modelo datos, permisos y reglas de negocio. He trabajado en sistemas comerciales y bibliotecarios, plataformas ciudadanas y aplicaciones con inteligencia artificial.",
@@ -72,6 +73,7 @@ const en: typeof es = {
   },
   about: {
     title: "About me",
+    portraitAlt: "Professional portrait of Mateo Beccan",
     description: [
       "I’m a Software Developer who completed the Technical Degree program in Software Development at Instituto Superior Brigadier López. My focus is backend development and business applications.",
       "In my projects with Java, Spring Boot, and relational databases, I design REST APIs and model data, permissions, and business rules. I’ve worked on sales and library management systems, civic platforms, and AI-powered applications.",
