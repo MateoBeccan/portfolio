@@ -477,6 +477,16 @@ a, button, summary { -webkit-tap-highlight-color: transparent; }
 .footer-inner { justify-content: space-between; }
 .footer-inner nav > a { display: inline-grid; align-items: center; min-height: 42px; }
 .footer-name { color: var(--text); font-weight: 650; }
+.back-to-top { display: none; }
+@media (width < 48rem) {
+  .back-to-top:not([hidden]) {
+    position: fixed; z-index: 8; display: inline-grid; width: 44px; height: 44px; border-radius: 50%;
+    inset-inline-end: calc(16px + env(safe-area-inset-right));
+    inset-block-end: calc(16px + env(safe-area-inset-bottom));
+    background: var(--surface); color: var(--accent); box-shadow: var(--shadow);
+  }
+  .back-to-top:not([hidden]):hover { background: var(--elevated); }
+}
 
 .case-hero {
   padding-block: clamp(24px, 4vw, 56px) clamp(34px, 6vw, 86px); border-bottom: 1px solid var(--subtle-border);

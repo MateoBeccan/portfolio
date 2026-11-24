@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import BackToTop from "@/components/layout/BackToTop";
 import { dictionaries } from "@/i18n/dictionary";
 import { isLocale, locales } from "@/i18n/locales";
 import { availableResumes } from "@/lib/resume";
@@ -37,6 +38,7 @@ export default async function Layout({ children, params }: LayoutProps<"/[lang]"
       <body>
         <a className="skip-link" href="#main-content">{ui.skip}</a>
         <Navbar locale={locale} nav={nav} ui={ui} cv={cv} cvLanguage={cv && resume.languages[cv.locale]} />
+        <BackToTop label={ui.backToTop} />
         {children}
         <Footer locale={locale} />
       </body>

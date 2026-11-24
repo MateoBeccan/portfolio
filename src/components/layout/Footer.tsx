@@ -17,7 +17,7 @@ export default function Footer({ locale }: { locale: Locale }) {
         <nav aria-label={ui.footerNav}>
           <Link href={`/${locale}#projects`} prefetch={false}>{nav.projects}</Link>
           <Link href={`/${locale}#contact`} prefetch={false}>{nav.contact}</Link>
-          <Link href={`/${locale}#home`} prefetch={false} className="icon-button" aria-label={ui.backHome}><ArrowUp size={17} aria-hidden="true" /></Link>
+          <a href={`/${locale}#home`} className="icon-button" aria-label={ui.backHome}><ArrowUp size={17} aria-hidden="true" /></a>
         </nav>
       </div>
     </footer>

@@ -97,14 +97,24 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
   }
 
   function sectionLinks(mobile = false) {
-    return Object.entries(nav).map(([id, label]) => (
-      <li key={id}>
-        <Link href={`${base}#${id}`} prefetch={false} aria-current={activeSection === id ? (isHome ? "location" : "true") : undefined} onClick={navigateToSection}>
+    return Object.entries(nav).map(([id, label]) => {
+      const href = `${base}#${id}`;
+      const current = activeSection === id ? (isHome ? "location" : "true") : undefined;
+      const content = (
+        <>
           <span>{label}</span>
           {mobile && <ChevronRight size={17} aria-hidden="true" />}
-        </Link>
-      </li>
-    ));
+        </>
+      );
+
+      return (
+        <li key={id}>
+          {id === "home"
+            ? <a href={href} aria-current={current} onClick={navigateToSection}>{content}</a>
+            : <Link href={href} prefetch={false} aria-current={current} onClick={navigateToSection}>{content}</Link>}
+        </li>
+      );
+    });
   }
 
   function languageSwitch(mobile = false) {
@@ -152,13 +162,13 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
           if (menuOpen && !event.currentTarget.contains(event.relatedTarget)) closeMenu();
         }}
       >
-        <Link href={`${base}#home`} prefetch={false} className="brand" onClick={navigateToSection}>
+        <a href={`${base}#home`} className="brand" onClick={navigateToSection}>
           <BrandMark eager />
           <span className="brand-copy">
             <span>{profile.name}</span>
             <span className="brand-role" lang="en">{profile.role}</span>
           </span>
-        </Link>
+        </a>
         <ul className="nav-links" ref={desktopLinks}>{sectionLinks()}</ul>
         <div className="nav-actions">
           <div className="nav-desktop-actions">
