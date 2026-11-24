@@ -27,8 +27,8 @@ export const education: Education = {
   endYear: 2026,
   status: "completed",
   areas: l(
-    ["Programación", "Bases de datos", "Análisis de sistemas", "Ingeniería de software", "Arquitectura de aplicaciones", "Sistemas de gestión"],
-    ["Programming", "Databases", "Systems analysis", "Software engineering", "Application architecture", "Business management systems"],
+    ["Desarrollo de software", "Bases de datos", "Análisis de sistemas", "Ingeniería de software", "Arquitectura de aplicaciones", "Sistemas de gestión"],
+    ["Software development", "Databases", "Systems analysis", "Software engineering", "Application architecture", "Business management systems"],
   ),
 };
 

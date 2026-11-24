@@ -1,4 +1,4 @@
-import { ExternalLink, FileText, MapPin } from "lucide-react";
+import { ExternalLink, FileText, Globe, MapPin } from "lucide-react";
 import ResumeDownloadLink from "@/components/ui/ResumeDownloadLink";
 import SocialActions from "@/components/ui/SocialActions";
 import { profile, type ResumeDocument } from "@/data/profile";
@@ -11,11 +11,17 @@ export default function Contact({ locale, resumes }: { locale: Locale; resumes: 
     <section className="section bordered" id="contact" data-nav tabIndex={-1}>
       <div className="wrap">
         <div className="contact-panel">
-          <div className="availability"><span aria-hidden="true" />{hero.available}</div>
-          <h2>{contact.title}</h2>
-          <p>{contact.description}</p>
-          <SocialActions locale={locale} contact />
-          <p className="location"><MapPin size={16} aria-hidden="true" />{profile.location}</p>
+          <div className="contact-copy">
+            <div className="availability"><span aria-hidden="true" />{hero.available}</div>
+            <h2>{contact.title}</h2>
+            <p>{contact.description}</p>
+            <ul className="contact-details" role="list">
+              <li className="location"><MapPin size={16} aria-hidden="true" />{profile.location}</li>
+              <li className="location"><Globe size={16} aria-hidden="true" />{contact.remote}</li>
+            </ul>
+            <SocialActions locale={locale} contact />
+            {profile.email && <p className="contact-address">{profile.email}</p>}
+          </div>
           {resumes.length > 0 && (
             <section className="resume-card" aria-labelledby="resume-title">
               <div className="resume-heading">

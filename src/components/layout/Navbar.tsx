@@ -113,12 +113,13 @@ export default function Navbar({ locale, nav, ui, cv, cvLanguage }: {
       <div className="lang-switch" aria-label={ui.language} role="group">
         {(["es", "en"] as const).map((language) => {
           const label = mobile ? names[language] : language.toUpperCase();
+          const accessibleLabel = mobile ? label : `${label} — ${names[language]}`;
           return language === locale ? (
             <span key={language} lang={language} aria-current="true">
-              {mobile ? label : <><span aria-hidden="true">{label}</span><span className="sr-only">{names[language]}</span></>}
+              {label}{!mobile && <span className="sr-only"> — {names[language]}</span>}
             </span>
           ) : (
-            <a key={language} href={otherPath} hrefLang={language} lang={language} aria-label={names[language]} onClick={(event) => {
+            <a key={language} href={otherPath} hrefLang={language} lang={language} aria-label={accessibleLabel} onClick={(event) => {
               const url = new URL(event.currentTarget.href);
               url.hash = window.location.hash;
               event.currentTarget.href = url.href;

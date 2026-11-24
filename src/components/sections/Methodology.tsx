@@ -1,8 +1,9 @@
+import { ClipboardList, Code2, FileText, GitBranch, ShieldCheck } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { dictionaries } from "@/i18n/dictionary";
 import type { Locale } from "@/i18n/locales";
 
-const processIcons = [ClipboardList, GitBranch, Code2, ShieldCheck, FileText];
+const icons = [ClipboardList, GitBranch, Code2, ShieldCheck, FileText];
 
 export default function Methodology({ locale }: { locale: Locale }) {
   const { process } = dictionaries[locale];
@@ -12,8 +13,16 @@ export default function Methodology({ locale }: { locale: Locale }) {
         <SectionTitle title={process.title} />
         <ol className="process-list" role="list">
           {process.steps.map(([title, description], index) => {
-            const Icon = processIcons[index];
-            return <li key={title}><span className="process-icon" aria-hidden="true"><Icon size={18} /></span><div><h3>{title}</h3><p>{description}</p></div></li>;
+            const Icon = icons[index];
+            return (
+              <li key={title}>
+                <span className="process-icon" aria-hidden="true"><Icon size={18} /></span>
+                <div>
+                  <h3><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span> {title}</h3>
+                  <p>{description}</p>
+                </div>
+              </li>
+            );
           })}
         </ol>
         <p className="process-note">{process.description}</p>
@@ -21,4 +30,3 @@ export default function Methodology({ locale }: { locale: Locale }) {
     </section>
   );
 }
-import { ClipboardList, Code2, FileText, GitBranch, ShieldCheck } from "lucide-react";

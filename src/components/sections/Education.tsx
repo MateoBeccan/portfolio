@@ -17,7 +17,7 @@ export default function Education({ locale }: { locale: Locale }) {
             <span className="panel-symbol"><GraduationCap size={22} aria-hidden="true" /></span>
             <div>
               <div className="education-meta">
-                <p className="eyebrow">{`${education.startYear} – ${education.endYear}`}</p>
+                <p className="eyebrow"><time dateTime={String(education.startYear)}>{education.startYear}</time> – <time dateTime={String(education.endYear)}>{education.endYear}</time></p>
                 <span className="education-status" data-status={education.status}>
                   {education.status !== "closing" && <Check size={14} aria-hidden="true" />}
                   {copy.education.status[education.status]}
@@ -42,7 +42,8 @@ export default function Education({ locale }: { locale: Locale }) {
                   <Award size={20} aria-hidden="true" />
                   <div>
                     <h3>{item.title[locale]}</h3>
-                    <p>{[item.institution, item.year, copy.certifications.categories[item.category]].filter(Boolean).join(" · ")}</p>
+                    <p className="credential-category">{copy.certifications.categories[item.category]} · <time dateTime={String(item.year)}>{item.year}</time></p>
+                    {item.institution && <p className="credential-issuer">{item.institution}</p>}
                     {item.credentialId && <p>{copy.ui.credential} {item.credentialId}</p>}
                     {document && <a href={document} target="_blank" rel="noopener noreferrer">{copy.ui.document}<span className="sr-only"> — {item.title[locale]}</span><ArrowUpRight size={15} aria-hidden="true" /></a>}
                     {verification && <a href={verification} target="_blank" rel="noopener noreferrer">{copy.ui.verify}<span className="sr-only"> — {item.title[locale]}</span><ArrowUpRight size={15} aria-hidden="true" /></a>}

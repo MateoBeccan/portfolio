@@ -25,7 +25,9 @@ export type Project = {
   type?: ProjectType;
   status?: ProjectStatus;
   featured?: boolean;
+  backendFocus?: boolean;
   technologies: Technology[];
+  technicalHighlights: LocalizedContent<string[]>;
   problem: LocalizedContent;
   solution: LocalizedContent;
   role?: LocalizedContent;

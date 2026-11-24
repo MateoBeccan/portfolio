@@ -3,13 +3,22 @@ import Link from "next/link";
 import { ArrowUpRight, BookOpen, Building2, CarFront, Layers3, MapPin, ScanText } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import type { Project, Technology } from "@/types/project";
-import { dictionaries } from "@/i18n/dictionary";
+import type { Dictionary } from "@/i18n/dictionary";
 import type { Locale } from "@/i18n/locales";
 import SkillBadge from "./SkillBadge";
 
-const icons = { laundry: Layers3, urban: MapPin, dealership: CarFront, career: ScanText, community: Building2, library: BookOpen };
+export const projectIcons = { laundry: Layers3, urban: MapPin, dealership: CarFront, career: ScanText, community: Building2, library: BookOpen };
 
-export type ShowcaseProject = Pick<Project, "slug" | "title" | "shortTitle" | "summary" | "category" | "type" | "status" | "featured" | "technologies" | "coverImage" | "repositoryUrl" | "demoUrl">;
+export type ShowcaseProject = Pick<Project, "slug" | "title" | "shortTitle" | "summary" | "category" | "type" | "status" | "featured" | "technologies" | "coverImage" | "repositoryUrl" | "demoUrl"> & { highlights: string[] };
+export type ShowcaseCopy = {
+  feature: string;
+  previous: string;
+  next: string;
+  select: string;
+  viewProject: string;
+  caseLinks: string;
+  caseStudy: Pick<Dictionary["caseStudy"], "categories" | "types" | "statuses">;
+};
 
 export function ProjectTags({ technologies, locale }: { technologies: Technology[]; locale: Locale }) {
   return <div className="tag-row">{technologies.map((item) => {
@@ -25,20 +34,18 @@ export function ProjectLinks({ project }: { project: Pick<Project, "repositoryUr
   </>;
 }
 
-export function ProjectMeta({ project, locale }: { project: Pick<Project, "category" | "type" | "status">; locale: Locale }) {
-  const { caseStudy } = dictionaries[locale];
+export function ProjectMeta({ project, copy }: { project: Pick<Project, "category" | "type" | "status">; copy: ShowcaseCopy["caseStudy"] }) {
   return <div className="project-meta">
-    <span>{caseStudy.categories[project.category]}</span>
-    {project.type && <span>{caseStudy.types[project.type]}</span>}
-    {project.status && <span>{caseStudy.statuses[project.status]}</span>}
+    <span>{copy.categories[project.category]}</span>
+    {project.type && <span>{copy.types[project.type]}</span>}
+    {project.status && <span>{copy.statuses[project.status]}</span>}
   </div>;
 }
 
-export default function ProjectCard({ project, locale, active, position, total }: { project: ShowcaseProject; locale: Locale; active: boolean; position: string; total: string }) {
-  const copy = dictionaries[locale];
+export default function ProjectCard({ project, locale, copy, active, position, total }: { project: ShowcaseProject; locale: Locale; copy: ShowcaseCopy; active: boolean; position: string; total: string }) {
   const title = typeof project.title === "string" ? project.title : project.title[locale];
   const image = project.coverImage;
-  const Icon = icons[project.category];
+  const Icon = projectIcons[project.category];
 
   return (
     <article className="showcase-slide" data-active={active} inert={!active} aria-hidden={active ? undefined : true} aria-label={`${position} / ${total} · ${title}`}>
@@ -57,16 +64,16 @@ export default function ProjectCard({ project, locale, active, position, total }
         )}
       </div>
       <div className="showcase-copy">
-        <div className="showcase-kicker">
-          <span className="showcase-index">{position}</span>
-          {project.featured && <span className="eyebrow">{copy.projects.feature}</span>}
-        </div>
-        <ProjectMeta project={project} locale={locale} />
+        {project.featured && <p className="showcase-feature eyebrow">{copy.feature}</p>}
+        <ProjectMeta project={project} copy={copy.caseStudy} />
         <h3>{title}</h3>
-        <p>{project.summary[locale]}</p>
+        <p className="showcase-summary">{project.summary[locale]}</p>
+        <ul className="showcase-highlights" role="list">
+          {project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+        </ul>
         <ProjectTags technologies={project.technologies} locale={locale} />
         <div className="project-actions">
-          <Link href={`/${locale}/projects/${project.slug}`} prefetch={false} className="button primary">{copy.ui.viewProject}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> — {title}</span></Link>
+          <Link href={`/${locale}/projects/${project.slug}`} prefetch={false} className="button primary">{copy.viewProject}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> — {title}</span></Link>
           <ProjectLinks project={project} />
         </div>
       </div>

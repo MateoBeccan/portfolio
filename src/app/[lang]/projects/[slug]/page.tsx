@@ -79,20 +79,22 @@ export default async function ProjectPage({ params }: Props) {
         <div className={cover ? "wrap case-hero-grid" : "wrap"}>
           <Link href={`/${lang}#projects`} prefetch={false} className="text-link"><ArrowLeft size={17} aria-hidden="true" />{ui.backProjects}</Link>
           <div className="case-heading">
-            <ProjectMeta project={project} locale={lang} />
+            <ProjectMeta project={project} copy={copy} />
             <h1>{title}</h1>
             {project.subtitle && <p className="case-subtitle">{project.subtitle[lang]}</p>}
             {project.event && <p className="case-event">{project.event[lang]}</p>}
-            <p className="case-summary">{project.description[lang]}</p>
-            {!hasDevelopmentApproach && <ProjectTags technologies={project.technologies} locale={lang} />}
-            {hasDevelopmentApproach && <a className="button secondary" href="#features">{ui.exploreFeatures}<ArrowUpRight size={16} aria-hidden="true" /></a>}
-            {(project.repositoryUrl || project.demoUrl) && <div className="project-actions"><ProjectLinks project={project} /></div>}
           </div>
           {cover && <figure className="case-cover">
             <Image src={cover.src} alt={cover.alt[lang]} width={cover.size?.width ?? 1600} height={cover.size?.height ?? 900}
               sizes="(max-width: 820px) 92vw, (max-width: 1200px) 45vw, 520px" fetchPriority="high" loading="eager" />
             {cover.title && <figcaption>{cover.title[lang]}</figcaption>}
           </figure>}
+          <div className="case-overview">
+            <p className="case-summary">{project.description[lang]}</p>
+            {!hasDevelopmentApproach && <ProjectTags technologies={project.technologies} locale={lang} />}
+            {hasDevelopmentApproach && <a className="button secondary" href="#features">{ui.exploreFeatures}<ArrowUpRight size={16} aria-hidden="true" /></a>}
+            {(project.repositoryUrl || project.demoUrl) && <div className="project-actions"><ProjectLinks project={project} /></div>}
+          </div>
         </div>
       </header>
       <div className="wrap case-content">

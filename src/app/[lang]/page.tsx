@@ -12,10 +12,12 @@ import { isLocale } from "@/i18n/locales";
 import { availableResumes } from "@/lib/resume";
 import { pageMetadata, siteUrl } from "@/lib/seo";
 
+const homeTitle = `${profile.name} | ${profile.role} · Java & Spring Boot`;
+
 export async function generateMetadata({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   if (!isLocale(lang)) return { title: dictionaries.es.errors.notFound };
-  return pageMetadata(lang, `${profile.name} | ${profile.role}`, dictionaries[lang].meta.description);
+  return pageMetadata(lang, homeTitle, dictionaries[lang].meta.description);
 }
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
@@ -28,7 +30,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "Person", "@id": personId, name: profile.name, jobTitle: profile.role, description: dictionaries[lang].meta.description, url: new URL("/es", siteUrl).href, homeLocation: { "@type": "Place", name: profile.location }, sameAs: socialLinks.map(({ href }) => href), knowsAbout: ["Backend Development", "Java", "Spring Boot", "SQL", "GeneXus", "Business Management Software"] },
-      { "@type": "WebSite", "@id": `${url}#website`, url, name: `${profile.name} | ${profile.role}`, inLanguage: lang, author: { "@id": personId } },
+      { "@type": "WebSite", "@id": `${url}#website`, url, name: homeTitle, inLanguage: lang, author: { "@id": personId } },
     ],
   };
 
